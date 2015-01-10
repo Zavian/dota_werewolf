@@ -1,0 +1,42 @@
+// No spaces in event names, max length 32
+// All strings are case sensitive
+///
+// valid data key types are:
+//   string : a zero terminated string
+//   bool   : unsigned int, 1 bit
+//   byte   : unsigned int, 8 bit
+//   short  : signed int, 16 bit
+//   long   : signed int, 32 bit
+//   float  : float, 32 bit
+//   uint64 : unsigned int 64 bit
+//   local  : any data, but not networked to clients
+///
+// following key names are reserved:
+//   local      : if set to 1, event is not networked to clients
+//   unreliable : networked, but unreliable
+//   suppress   : never fire this event
+//   time	: firing server time
+//   eventid	: holds the event ID
+
+"CustomEvents"
+{
+	"wwt_lumber_changed"
+	{
+		"player"	"short"
+	    "lumber"    "short"
+	}
+
+	"returning_players"
+	{
+		"player0"	"string"
+		"player1"	"string"
+		"player2"	"string"
+		"player3"	"string"
+		"player4"	"string"
+		"player5"	"string"
+		"player6"	"string"
+		"player7"	"string"
+		"player8"	"string"
+		"player9"	"string"
+	}
+}

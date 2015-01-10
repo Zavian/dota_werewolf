@@ -1,0 +1,34 @@
+// Dota Heroes File
+// NOTE: This is not for creating new heroes, this is for taking a currently existing hero as a template and overriding
+// the specified key-value combinations.  Use override_hero <hero_to_override> for this.
+"DOTAHeroes"
+{
+	//=================================================================================================================
+	// HERO: Tidehunter
+	//=================================================================================================================
+	"npc_wwt_hero_tidehunter"
+	{
+		"override_hero"				"npc_dota_hero_tidehunter"					// Hero to override
+		"AbilityLayout"				"4"
+		"Ability1"					"spawn_worker_TEST"							// Ability 1
+		"Ability2"					"spawn_farm_TEST"							// Ability 2
+		"Ability3"					"wwt_lumber_collector0"						// Ability 2
+		"Ability4"					""											// Ability 4
+		//"Ability15"					"werewolf"
+		//"VisionNighttimeRange"	"1800"										// Range of vision at night time.
+		"ModelScale"				"0.7"										// Scale of the assigned model
+	}
+
+	"npc_wwt_hero_omniknight"
+	{
+		"override_hero"				"npc_dota_hero_omniknight"					// Hero to override
+		"AbilityLayout"				"4"
+		"Ability1"					"spawn_worker_TEST"							// Ability 1
+		"Ability2"					"spawn_farm_TEST"							// Ability 2
+		"Ability3"					"wwt_lumber_collector0"						// Ability 2
+		"Ability4"					""											// Ability 4
+		//"Ability15"					"werewolf"
+		//"VisionNighttimeRange"	"1800"										// Range of vision at night time.
+		"ModelScale"				"0.7"										// Scale of the assigned model
+	}
+}

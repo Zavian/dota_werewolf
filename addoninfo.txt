@@ -1,0 +1,7 @@
+"AddonInfo"
+{
+	"TeamCount" 	"10"
+	"maps"			"werewolf"
+    "IsPlayable"	"1"
+    "addontitle"	"Werewolf Transylvania"
+}
