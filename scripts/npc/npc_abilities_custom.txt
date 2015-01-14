@@ -2,6 +2,146 @@
 "DOTAAbilities"
 {
 	"Version"		"1"
+
+	"sprint"
+	{
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"MaxLevel"						"4"
+
+		"OnSpellStart"
+		{
+			"ApplyModifier"
+			{
+				"Target" 			"CASTER"
+				"ModifierName"		"modifier_item_ogre_axe"
+			}
+		}
+
+		"Modifiers"    				
+		{  							
+			"sprint_modifier"  
+			{
+				
+				"IsDebuff"					"0"
+				"IsPurgable"				"0"
+				"IsStunDebuff"				"0"
+				"IsHidden"					"0"
+				"IsPassive"					"1"
+				"Properties"
+				{
+					
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"%bonus_speed"
+				}
+			}
+
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_speed"			"10 20 30 40"
+			}
+		}
+	}
+
+	"tremendous_strength"
+	{
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"MaxLevel"						"4"
+
+		"Modifiers"    				
+		{  			
+			"tremendous_strength_modifier"
+			{
+				"IsDebuff"					"0"
+				"IsPurgable"				"0"
+				"IsStunDebuff"				"0"
+				"IsHidden"					"0"
+				"IsPassive"					"1"
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_EXTRA_STRENGTH_BONUS"	"%bonus_strength"
+				}
+			}
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_strength"		"10 20 30 40"
+			}
+		}
+	}
+
+	"prowl"
+	{
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"6"
+		"IsHidden"						"0"
+
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"10"
+
+
+		"OnSpellStart"
+		{
+			"ApplyModifier"
+			{
+				"Target" 			"CASTER"
+				"ModifierName"		"modifier_item_invisibility_edge_windwalk"
+			}
+			"ApplyModifier"
+			{
+				"Target" 			"CASTER"
+				"ModifierName"		"modifier_riki_backstab"
+			}
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"windwalk_duration"		"14.0"
+			}
+			"02"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"windwalk_movement_speed"	"20"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"windwalk_fade_time"	"0.3"
+			}
+			"04"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"windwalk_bonus_damage"	"175"
+			}
+			"05"
+			{
+				"var_type"						"FIELD_FLOAT"
+				"damage_multiplier"				"0.5 0.75 1.0 1.25"
+			}
+			"06"
+			{
+				"var_type"						"FIELD_INTEGER"
+				"backstab_angle"				"105 105 105 105"
+			}
+		}
+	}
 	
 	"werewolf"
 	{
@@ -16,7 +156,7 @@
 
 		// Cost
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityManaCost"				"100 100 100"		
+		"AbilityManaCost"				"0"		
 
 		// Special
 		//-------------------------------------------------------------------------------------------------------------

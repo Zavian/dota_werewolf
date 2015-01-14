@@ -17,6 +17,7 @@ function Precache( context )	-- Function to Precache models that aren't in spell
 	PrecacheModel("models/props_structures/bridge_statue001.vmdl", context)
 	PrecacheModel("models/props_debris/shop_set_seat001.vmdl", context)
 	PrecacheModel("models/heroes/lycan/lycan_wolf.vmdl", context)
+	PrecacheResource("model_folder", "models/heroes/lycan", context)
 
 	--[[
 		Precache things we know we'll use.  Possible file types include (but not limited to):
@@ -81,6 +82,9 @@ function WWT:OnThink()
 	else 
 		thereIsNoWolf = true 	-- If it's DayTime
 		if(theWerewolf ~= nil) then
+			local gold = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():GetGold()
+			local xp = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():GetCurrentXP()
+			PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_omniknight", gold, xp)	
 			PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():SetModel(Players[theWerewolf]:getModel())
 		-- Resetting the player's model	
 		end
@@ -139,7 +143,11 @@ function WWT:NightComes()
 			theWerewolf = a[math.random(a[1], table.getn(a))]			-- Getting the possible players that can be the wolf
 			print("The werewolf is the player number " .. theWerewolf)
 		end
-		local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()			-- Getting the hero wolf
+		local gold = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():GetGold()
+		local xp = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():GetCurrentXP()
+
+		PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_lycan", gold, xp)			
+		local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()		-- Getting the hero wolf
 		hero:AddAbility("werewolf")														-- Giving him the transformation spell
 		hero:FindAbilityByName("werewolf"):SetLevel(3)									
 		hero:CastAbilityImmediately(hero:FindAbilityByName("werewolf"), theWerewolf)	-- Trasforming him
