@@ -8,26 +8,15 @@
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"MaxLevel"						"4"
+		"AbilityTextureName"    		"Gaben"
 
-		"OnSpellStart"
-		{
-			"ApplyModifier"
-			{
-				"Target" 			"CASTER"
-				"ModifierName"		"modifier_item_ogre_axe"
-			}
-		}
 
 		"Modifiers"    				
 		{  							
 			"sprint_modifier"  
 			{
-				
-				"IsDebuff"					"0"
-				"IsPurgable"				"0"
-				"IsStunDebuff"				"0"
-				"IsHidden"					"0"
-				"IsPassive"					"1"
+				"TextureName" 				"Gaben"   
+				"Passive"					"1"
 				"Properties"
 				{
 					
@@ -52,19 +41,17 @@
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"MaxLevel"						"4"
+		"AbilityTextureName"    		"Gaben"
 
 		"Modifiers"    				
 		{  			
 			"tremendous_strength_modifier"
 			{
-				"IsDebuff"					"0"
-				"IsPurgable"				"0"
-				"IsStunDebuff"				"0"
-				"IsHidden"					"0"
-				"IsPassive"					"1"
+				"TextureName" "Gaben"	   
+				"Passive"					"1"
 				"Properties"
 				{
-					"MODIFIER_PROPERTY_EXTRA_STRENGTH_BONUS"	"%bonus_strength"
+					"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS"	"%bonus_strength"
 				}
 			}
 		}
@@ -93,52 +80,75 @@
 		//-------------------------------------------------------------------------------------------------------------
 		"AbilityManaCost"				"10"
 
-
 		"OnSpellStart"
 		{
 			"ApplyModifier"
 			{
 				"Target" 			"CASTER"
-				"ModifierName"		"modifier_item_invisibility_edge_windwalk"
-			}
-			"ApplyModifier"
+				"ModifierName"		"prowl_modifier"	// NEED TO REWORK THE ABILITY
+			}			
+		}
+
+		"Modifiers"    				// Can be used to create custom modifier. 
+		{  							// There are many snippets that can be expanded in to the modifiers. 
+			"prowl_modifier"   	// This should be the name of your modifier
 			{
-				"Target" 			"CASTER"
-				"ModifierName"		"modifier_riki_backstab"
+				// Refer to http://hex6.se/dota/modifier_functions.txt to see what snippets can be expanded in here.
+				"IsDebuff"					"0"
+				"IsPurgable"				"0"
+				"IsStunDebuff"				"0"
+				"IsHidden"					"0"
+				"TextureName"				"Gaben"
+				"OnCreated"
+				{
+					"ApplyModifier"
+					{
+						"Target" 			"CASTER"
+						"ModifierName"		"modifier_persistent_invisibility"
+					}
+
+					"RunScript"
+					{
+						"ScriptFile"			"scripts/vscripts/classes/player.lua"
+						"Function"				"werewolfApplyProwl"
+					}
+				}
+				"OnAttackLanded"
+				{
+					"RemoveModifier"
+					{
+						"Target" 			"CASTER"
+						"ModifierName"		"prowl_modifier"
+					}
+					"RemoveModifier"
+					{
+						"Target" 			"CASTER"
+						"ModifierName"		"modifier_persistent_invisibility"
+					}
+					"RunScript"
+					{
+						"ScriptFile"			"scripts/vscripts/classes/player.lua"
+						"Function"				"werewolfProwledAttack"
+						"Damage"				"%attack_damage"
+						"BonusDamage"			"%bonus_damage"
+						"DefaultHull"			"%default_hull"
+					}
+				}
 			}
 		}
+		
 
 		"AbilitySpecial"
 		{
 			"01"
 			{
-				"var_type"				"FIELD_FLOAT"
-				"windwalk_duration"		"14.0"
+				"var_type"		"FIELD_INTEGER"
+				"bonus_damage"	"40"
 			}
 			"02"
 			{
-				"var_type"				"FIELD_INTEGER"
-				"windwalk_movement_speed"	"20"
-			}
-			"03"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"windwalk_fade_time"	"0.3"
-			}
-			"04"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"windwalk_bonus_damage"	"175"
-			}
-			"05"
-			{
-				"var_type"						"FIELD_FLOAT"
-				"damage_multiplier"				"0.5 0.75 1.0 1.25"
-			}
-			"06"
-			{
-				"var_type"						"FIELD_INTEGER"
-				"backstab_angle"				"105 105 105 105"
+				"var_type"		"FIELD_INTEGER"
+				"bonus_damage"	"8"
 			}
 		}
 	}
@@ -170,7 +180,7 @@
 			"02"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"speed"				"650"
+				"speed"						"400"
 			}
 			"03"
 			{

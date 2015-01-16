@@ -1,5 +1,23 @@
 print("[WWT] Functions loaded.")
 
+function dealDamage(source, target, damage)
+    if damage <= 0 or source == nil or target == nil then
+	return
+    end
+    local dmgTable = {8192,4096,2048,1024,512,256,128,64,32,16,8,4,2,1}
+    local item = CreateItem( "item_deal_damage", source, source)
+    for i=1,#dmgTable do
+	local val = dmgTable[i]
+	local count = math.floor(damage / val)
+	if count >= 1 then
+	    item:ApplyDataDrivenModifier( source, target, "dealDamage" .. val, {duration=0} )
+	    damage = damage - val
+	end
+    end
+    UTIL_RemoveImmediate(item)
+    item = nil
+end
+
 
 function selectPlayerOrUnit(o, requestedType)
 	--[[

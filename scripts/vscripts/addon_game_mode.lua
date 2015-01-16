@@ -148,11 +148,21 @@ function WWT:NightComes()
 
 		PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_lycan", gold, xp)			
 		local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()		-- Getting the hero wolf
-		hero:AddAbility("werewolf")														-- Giving him the transformation spell
-		hero:FindAbilityByName("werewolf"):SetLevel(3)									
-		hero:CastAbilityImmediately(hero:FindAbilityByName("werewolf"), theWerewolf)	-- Trasforming him
-		hero:RemoveAbility("werewolf")
+		--hero:AddAbility("werewolf")														-- Giving him the transformation spell
+		--hero:FindAbilityByName("werewolf"):SetLevel(3)									
+		--hero:CastAbilityImmediately(hero:FindAbilityByName("werewolf"), theWerewolf)	-- Trasforming him
+		--hero:RemoveAbility("werewolf")
 		hero:SetModel("models/heroes/lycan/lycan_wolf.vmdl") -- Setting the model
+		local modifier = "modifier_lycan_shapeshift"
+		local modifierData = {
+			duration = 240,
+			speed = 400,
+			bonus_night_vision = 0,
+			crit_chance = 0,
+			crit_damage = 0,
+			transformation_time = 0
+		}
+		hero:AddNewModifier(hero, nil, modifier, modifierData)
 	end
 end
 

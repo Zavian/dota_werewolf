@@ -30,6 +30,14 @@
 		//"Ability15"					"werewolf"
 		//"VisionNighttimeRange"	"1800"										// Range of vision at night time.
 		"ModelScale"				"0.7"										// Scale of the assigned model
+
+		"AttributePrimary"			"DOTA_ATTRIBUTE_STRENGTH"
+		"AttributeBaseStrength"		"30"										// Base strength
+		"AttributeStrengthGain"		"9"										// Strength bonus per level.
+		"AttributeBaseIntelligence"	"20"										// Base intelligence
+		"AttributeIntelligenceGain"	"4"										// Intelligence bonus per level.
+		"AttributeBaseAgility"		"20"										// Base agility
+		"AttributeAgilityGain"		"4"
 	}
 
 	"npc_wwt_hero_lycan"

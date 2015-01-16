@@ -49,12 +49,20 @@
 			this.notificationModule.getChildByName("newNotification").visible = false;
 			trace();
 			trace();
-			o(globals, "");
+			o(gameAPI, "gameAPI");
 			trace();
+			o(globals, "globals");
+			trace();
+			o(elementName, "elementName");
 			trace();
 			//let the client rescale the UI
 			Globals.instance.resizeManager.AddListener(this);
+			trace(elementName);
+			trace(elementName.toString());
+			trace(elementName.length);
+			//.addEventListener(ValveLib.Events.InputBoxEvent, onChat);
 			
+						
 			//var oldMC = this.allyModule.getChildByName("placeholderRect")
 			/*this.drpDown = replaceWithValveComponent(oldMC, "ComboBoxSkinned", true);
 			this.drpDown.x = this.drpDown.x - (this.drpDown.width / 2);
@@ -84,6 +92,10 @@
 				(this.allyModule.getChildByName("strPlayer" + i) as TextField).wordWrap = false
 			}
 			
+		}
+		
+		function onChat(args:Object) {
+			trace("wutwutwutwutwutwutwutwutwutwutwutwutwutwutwutwutwutwutwutwutwutwutwutwut");
 		}
 		
 		function clickStrPlayer(evt:MouseEvent) {
@@ -127,6 +139,13 @@
 			
 			this.gameAPI.SendServerCommand("GetAllPlayers");		
 			
+			trace(elementName);
+			trace(elementName.toString());
+			trace(elementName.length);
+			for(var i:int = 0; i < elementName.length; i++) {
+				trace(elementName[i]);
+				trace(elementName[i].toString());
+			}
 		}
 		
 		function btnCloseMenuClick(evt:MouseEvent) {
@@ -150,6 +169,8 @@
 				
 			}
 		}
+		
+		
 		
 		//this handles the resizes - credits to Nullscope
 		public function onResize(re:ResizeManager) : * {

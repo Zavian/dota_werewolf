@@ -252,3 +252,38 @@ function Player:remLumber(lumber)
 	else self.lumber = self.lumber - lumber
 	end
 end
+
+
+function werewolfApplyProwl(keys)
+	local caster = keys.caster
+	print(caster:GetHullRadius())
+	local newHull = caster:GetHullRadius() - (caster:GetHullRadius() / 100) * 20
+	caster:SetHullRadius(newHull)
+	print(caster:GetHullRadius())
+end
+
+function differenceFromAngles(alpha, beta)
+    if alpha > beta then
+        return alpha - beta
+    end
+    return beta-alpha
+end
+
+function werewolfProwledAttack(keys)
+	local caster = keys.caster
+	local target = keys.target
+
+	-- Here I will calculate if my hero is in front or behind my target.
+	-- I know that if the angle of my target is opposite of the angle of my hero
+	-- my hero is facing the face of the target
+
+	--print(math.floor(target:GetAnglesAsVector()[2]))
+	--print(math.floor(caster:GetAnglesAsVector()[2]))
+	local casterAngle = math.floor(caster:GetAnglesAsVector()[2])
+	local targetAngle = math.floor(target:GetAnglesAsVector()[2])
+	local triggerAngle = 50
+	if(AngleDiff(casterAngle, targetAngle) > -triggerAngle and AngleDiff(casterAngle, targetAngle) < triggerAngle) then
+ 		dealDamage(caster, target, keys.BonusDamage)
+	end
+	caster:SetHullRadius(keys.DefaultHull) 
+end
