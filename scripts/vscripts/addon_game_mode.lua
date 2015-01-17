@@ -82,11 +82,10 @@ function WWT:OnThink()
 	else 
 		thereIsNoWolf = true 	-- If it's DayTime
 		if(theWerewolf ~= nil) then
-			local gold = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():GetGold()
-			local xp = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():GetCurrentXP()
-			PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_omniknight", gold, xp)	
-			PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():SetModel(Players[theWerewolf]:getModel())
-		-- Resetting the player's model	
+			local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()
+			if(Players[theWerewolf]:IsNow() == "werewolf") then
+				Players[theWerewolf]:transform(hero, false)	
+			end		
 		end
 	end
 
@@ -143,26 +142,9 @@ function WWT:NightComes()
 			theWerewolf = a[math.random(a[1], table.getn(a))]			-- Getting the possible players that can be the wolf
 			print("The werewolf is the player number " .. theWerewolf)
 		end
-		local gold = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():GetGold()
-		local xp = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():GetCurrentXP()
 
-		PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_lycan", gold, xp)			
-		local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()		-- Getting the hero wolf
-		--hero:AddAbility("werewolf")														-- Giving him the transformation spell
-		--hero:FindAbilityByName("werewolf"):SetLevel(3)									
-		--hero:CastAbilityImmediately(hero:FindAbilityByName("werewolf"), theWerewolf)	-- Trasforming him
-		--hero:RemoveAbility("werewolf")
-		hero:SetModel("models/heroes/lycan/lycan_wolf.vmdl") -- Setting the model
-		local modifier = "modifier_lycan_shapeshift"
-		local modifierData = {
-			duration = 240,
-			speed = 400,
-			bonus_night_vision = 0,
-			crit_chance = 0,
-			crit_damage = 0,
-			transformation_time = 0
-		}
-		hero:AddNewModifier(hero, nil, modifier, modifierData)
+		local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()
+		Players[theWerewolf]:transform(hero, true)
 	end
 end
 

@@ -8,6 +8,16 @@ function Player.create(id, lumber)
 	local plr = {}
 	setmetatable(plr, Player)
 
+	plr.isInWater = false
+	plr.timeInWater = 0
+
+	plr._HumanSpells = {"wwt_lumber_collector0", "adrenaline_rush", "poseidon", "toxic_bomb", "spear_shot",
+					"fish_net", "midas", "awesome", "call_dog"
+					"scarecrow"}
+	plr.learnedHumanSpells = {"wwt_lumber_collector0", "adrenaline_rush"}
+
+	plr._WerewolfSpells = {"prowl", "trmendous_strength", "sprint", "acute_sense"}
+
 	plr.id = id 			-- Player's ID (ranging from 0 to 9)
 	plr.lumber = lumber 	-- Player's lumber
 	plr.set = false 		-- If the player has been initially set (gold to 150 at beginning)
@@ -39,12 +49,109 @@ function getSetuppedPlayers()
 	return array
 end
 
+function Player:IsNow()
+	return self._NOW
+end
+
+function Player:IsNow(newNow)
+	self._NOW = newNow
+end
+
 function Player:setModel(model)
 	self.MODEL = model
 end
 
 function Player:getModel()
 	return self.MODEL
+end
+
+function Player:transform(hero, toWerewolf)
+	if(toWerewolf) then
+		-- Human to Wolf
+		local XP = 0
+		self:IsNow("werewolf")
+		if(self.werewolfXP ~= nil) then
+			XP = self.werewolfXP
+		end
+		self.humanXP = hero:GetCurrentXP()
+		self.humanGold = hero:GetGold()
+		-- Need to hide the lumber
+
+		self:storeSpells(hero, true)
+
+		PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_lycan", 0, XP)			
+			
+		hero:SetModel("models/heroes/lycan/lycan_wolf.vmdl")
+
+		self:learnSpells(hero, true)
+		local modifier = "modifier_lycan_shapeshift"
+		local modifierData = {
+			duration = 240,
+			speed = 400,
+			bonus_night_vision = 0,
+			crit_chance = 0,
+			crit_damage = 0,
+			transformation_time = 0
+		}
+		hero:AddNewModifier(hero, nil, modifier, modifierData)
+	else
+		-- Wolf to Human
+		local XP = 0
+		self:IsNow("human")
+		if(self.humanXP ~= nil) then
+			XP = self.humanXP
+		end
+		self.werewolfXP = hero:GetCurrentXP()
+
+		self:storeSpells(hero, false)
+		self:learnSpells(hero, false)
+
+		PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_omniknight", self.humanGold, XP)	
+		-- Need to show the lumber
+		hero:SetModel(self.MODEL)
+	end
+end	
+
+function Player:storeSpells(hero, toWerewolf)
+	if(toWerewolf) then
+		-- Human to Wolf
+		self.learnedHumanSpells = {}
+		for i = 1, table.getn(self._HumanSpells) do
+			-- If the hero has a level of the ability I will store it
+	    	if(hero:FindAbilityByName(self._HumanSpells[i]):GetLevel() == 1) then
+	    		table.insert(self._HumanSpells[i])
+	    	end
+	    end
+	else
+		-- Wolf to Human
+		for i=1,table.getn(self._WerewolfSpells) do
+			if(hero:FindAbilityByName(self._WerewolfSpells[i]):GetLevel() > 0) then
+				-- Spell Name
+				self.learnedWerewolfSpells[i][1] = self._WerewolfSpells[i]
+
+				-- Spell Level
+				self.learnedWerewolfSpells[i][2] = hero:FindAbilityByName(self._WerewolfSpells[i]):GetLevel()
+			end
+		end
+	end
+end
+
+function Player:learnSpells(hero, toWerewolf)
+	if(toWerewolf) then
+		-- Human to Wolf
+		if(self.learnedWerewolfSpells ~= nil) then
+			for i=1,4 do
+				hero:FindAbilityByName(learnedWerewolfSpells[i][1]):SetLevel(learnedWerewolfSpells[i][2])
+			end
+		end
+	else
+		-- Wolf to Human
+		if(self.learnedHumanSpells ~= nil) then
+			for i=1,table.getn(learnedHumanSpells) do
+				hero:FindAbilityByName(learnedHumanSpells[i]):SetLevel(1)
+			end
+		end
+	end
 end
 
 function Player:setTeam(team, color, hero)
@@ -88,8 +195,10 @@ function Player:createUnit(name, caster, location)
 	local unit = CreateUnitByName(name, location, false, nil, nil, caster:GetTeam())
 	unit:SetControllableByPlayer( self.id, true )
 	unit.vOwner = caster:GetOwner()
-	--need if (worker)
-	unit:FindAbilityByName("wwt_lumber_collector0"):SetLevel(1)
+	if(name == "npc_wwt_worker") then
+		-- Need to select the level of lumber collector
+		unit:FindAbilityByName("wwt_lumber_collector0"):SetLevel(1)
+	end
 	if(self.Units == nil) then
 		self.Units[1] = Unit.create(unit:GetEntityIndex(), self.id)
 	else
@@ -272,13 +381,6 @@ end
 function werewolfProwledAttack(keys)
 	local caster = keys.caster
 	local target = keys.target
-
-	-- Here I will calculate if my hero is in front or behind my target.
-	-- I know that if the angle of my target is opposite of the angle of my hero
-	-- my hero is facing the face of the target
-
-	--print(math.floor(target:GetAnglesAsVector()[2]))
-	--print(math.floor(caster:GetAnglesAsVector()[2]))
 	local casterAngle = math.floor(caster:GetAnglesAsVector()[2])
 	local targetAngle = math.floor(target:GetAnglesAsVector()[2])
 	local triggerAngle = 50
