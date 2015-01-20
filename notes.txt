@@ -1,1 +1,2 @@
-globals.Loader_chat.movieClip.chat_main.chat
+https://github.com/ash47/LegendsOfDota/blob/eda14f57a4cea977516650a22af69f73120e6be2/generators/menu/test.as#L407
+var chat = globals.Loader_chat.movieClip.chat_main.chat
