@@ -3,6 +3,39 @@
 {
 	"Version"		"1"
 
+	"acute_sense"
+	{
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+		"MaxLevel"						"2"
+		"AbilityTextureName"    		"Gaben"
+
+
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"ScriptFile"			"scripts/vscripts/classes/player.lua"
+				"Function"				"werewolfAcuteSenseCast"
+				"Level"					"%level"
+				"Duration"				"4"
+			}
+		}
+		
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"level"					"1 2"
+			}
+		}
+	}
+
 	"sprint"
 	{
 		"BaseClass"						"ability_datadriven"

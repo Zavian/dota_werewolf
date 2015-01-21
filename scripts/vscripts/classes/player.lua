@@ -12,8 +12,7 @@ function Player.create(id, lumber)
 	plr.timeInWater = 0
 
 	plr._HumanSpells = {"wwt_lumber_collector0", "adrenaline_rush", "poseidon", "toxic_bomb", "spear_shot",
-					"fish_net", "midas", "awesome", "call_dog"
-					"scarecrow"}
+					"fish_net", "midas", "awesome", "call_dog", "scarecrow"}
 	plr.learnedHumanSpells = {"wwt_lumber_collector0", "adrenaline_rush"}
 
 	plr._WerewolfSpells = {"prowl", "trmendous_strength", "sprint", "acute_sense"}
@@ -79,7 +78,8 @@ function Player:transform(hero, toWerewolf)
 
 		self:storeSpells(hero, true)
 
-		PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_lycan", 0, XP)			
+		PlayerResource:ReplaceHeroWith(self.id, "npc_dota_hero_lycan", 0, XP)	
+		hero = PlayerResource:GetPlayer(self.id):GetAssignedHero()		
 			
 		hero:SetModel("models/heroes/lycan/lycan_wolf.vmdl")
 
@@ -107,6 +107,7 @@ function Player:transform(hero, toWerewolf)
 		self:learnSpells(hero, false)
 
 		PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_omniknight", self.humanGold, XP)	
+		hero = PlayerResource:GetPlayer(self.id):GetAssignedHero()	
 		-- Need to show the lumber
 		hero:SetModel(self.MODEL)
 	end
@@ -118,9 +119,11 @@ function Player:storeSpells(hero, toWerewolf)
 		self.learnedHumanSpells = {}
 		for i = 1, table.getn(self._HumanSpells) do
 			-- If the hero has a level of the ability I will store it
-	    	if(hero:FindAbilityByName(self._HumanSpells[i]):GetLevel() == 1) then
-	    		table.insert(self._HumanSpells[i])
-	    	end
+			if(hero:FindAbilityByName(self._HumanSpells[i]) ~= nil) then
+				if(hero:FindAbilityByName(self._HumanSpells[i]):GetLevel() == 1) then
+					table.insert(self.learnedHumanSpells, self._HumanSpells[i])
+				end
+			end
 	    end
 	else
 		-- Wolf to Human
@@ -388,4 +391,31 @@ function werewolfProwledAttack(keys)
  		dealDamage(caster, target, keys.BonusDamage)
 	end
 	caster:SetHullRadius(keys.DefaultHull) 
+end
+
+function werewolfAcuteSenseCast(keys)
+	local level = keys.Level
+	local caster = keys.caster
+	--print("Entered in the cast")
+	if(level == 1) then
+		--print("Entered in the if")
+		local entities = Entities:FindAllByName("npc_dota_hero_omniknight")
+		PrintTable(entities)
+		for i=1, table.getn(entities) do
+			-- if player hasn't the inHouse modifier
+			local location = entities[i]:GetAbsOrigin()
+			local dummy_unit = CreateUnitByName("npc_dummy_ping", location, false, nil, nil, caster:GetTeam())
+			--print("Spawned the dummy unit")
+			--print("Destroying dummy in " .. keys.Duration)
+			Timers:CreateTimer({
+			  	endTime = keys.Duration,
+			  	callback = function()
+			  	  dummy_unit:Destroy()
+			  	  --print("Dummy unit destroyed")
+			  	end
+	  		})
+		end
+	else
+
+	end
 end
