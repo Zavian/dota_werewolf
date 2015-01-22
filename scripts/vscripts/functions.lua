@@ -127,8 +127,8 @@ function createTrees()
 		dummy:RemoveModifierByName("modifier_invulnerable")
 		--dummy:AddAbility("tree_ability")
 		--dummy:FindAbilityByName("tree_ability"):SetLevel(1)
-		dummy:SetHealth(1000)
-		dummy:SetBaseHealthRegen(1000.0);
+		--dummy:SetHealth(1000)
+		--dummy:SetBaseHealthRegen(1000.0);
 	end
 	treesSpawned = true
 	print(table.getn(trees) - 1 .. " Trees created.")

@@ -18,10 +18,12 @@
 		"Model"						"models/props_gameplay/default_ward.mdl"			// Model.
 		//"SoundSet"				"Creep_Good_Melee"									// Name of sound set.
 		"Level"						"5"
-		"ModelScale"				"3"
+		"ModelScale"				"0"
 		"IsSummoned"				"1"
 		"CanBeDominated"			"0"
 		"BoundsHullName"   			"DOTA_HULL_SIZE_TOWER"
+		"MinimapIcon"				"minimap_ward_invis"
+		"MinimapIconSize"			"650"
 
 		
 		// Abilities
@@ -63,8 +65,7 @@
 		"BountyGoldMin"				"100"		// Gold earned min.
 		"BountyGoldMax"				"100"		// Gold earned max.
 
-		"MinimapIcon"					"minimap_ward_invis"
-		"MinimapIconSize"				"1000"
+		
 
 
 		// Movement
@@ -421,6 +422,8 @@
 		"AttributeIntelligenceGain"	"0"			// Intelligence bonus per level.
 		"AttributeBaseAgility"		"0"			// Base agility
 		"AttributeAgilityGain"		"0"			// Agility bonus per level.
+		"StatusHealth"				"1000000"	// Base health.
+		"StatusHealthRegen"			"100000.0"		// Health regeneration rate.
 
 		// Bounty
 		//----------------------------------------------------------------
