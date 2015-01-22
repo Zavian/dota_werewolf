@@ -3,6 +3,246 @@
 {
 	"Version"		"1"
 
+	//=================================================================================================================
+	// Villager's Ability: Adrenaline Rush
+	//=================================================================================================================
+	"adrenaline_rush"
+	{
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"MaxLevel"						"1"
+		"AbilityTextureName"    		"Gaben"
+
+
+		"OnSpellStart"
+		{
+			"ApplyModifier"
+			{
+				"ModifierName"	"modifier_item_mask_of_madness"
+				"Target" 		"CASTER"
+				"Duration"		"%duration"
+			}
+			
+		}
+		
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"lifesteal_percent"		"0"
+			}
+			"02"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"berserk_bonus_attack_speed"	"100"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"berserk_bonus_movement_speed"	"50"
+			}
+			"04"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"berserk_extra_damage"	"25"
+			}
+			"05"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"berserk_duration"		"13.0"
+			}
+		}
+	}
+
+	//=================================================================================================================
+	// Villager's Ability: Nothin’ but the fish
+	//=================================================================================================================
+	"poseidon"
+	{
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"MaxLevel"						"1"
+		"AbilityTextureName"    		"Gaben"
+
+
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"ScriptFile"			"scripts/vscripts/classes/player.lua"
+				"Function"				"villagerPoseidon"
+				"Duration"				"300"
+				"Cooldown"				"120"
+			}
+		}
+	}
+
+	//=================================================================================================================
+	// Villager's Ability: Toxic Bomb
+	//=================================================================================================================
+	"toxic_bomb"
+	{
+		// General
+	    //-------------------------------------------------------------------------------------
+	    "BaseClass" 				"ability_datadriven" 
+	    "AbilityBehavior" 			"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
+	    "AbilityUnitTargetTeam" 	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+	    "AbilityUnitTargetType" 	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+	    "AbilityUnitDamageType" 	"DAMAGE_TYPE_MAGICAL"
+
+	    // Stats
+	    //-------------------------------------------------------------------------------------
+	    "AbilityCastRange" 			"600"
+
+	    // Special
+	    //-------------------------------------------------------------------------------------
+	    "AbilitySpecial"
+	    {
+	        "01"
+	        {
+	            "var_type" "FIELD_INTEGER"
+	            "distance" "600"
+	        }
+	        "02"
+	        {
+	            "var_type" 	"FIELD_INTEGER"
+	            "radius" 	"200"
+	        }
+	    }
+
+	    "precache"
+	    {
+	        "particle" "particles/units/heroes/hero_mirana/mirana_spell_arrow.vpcf"
+	    }
+
+	    // Data Driven
+	    //-------------------------------------------------------------------------------------
+	    "OnSpellStart"
+	    {
+	        "LinearProjectile"
+	        {
+	            "Target" 			"POINT"
+	            "EffectName" 		"particles/units/heroes/hero_mirana/mirana_spell_arrow.vpcf"
+	            "MoveSpeed" 		"600"
+	            "StartRadius" 		"125"
+	            "StartPosition" 	"attach_attack1"
+	            "EndRadius" 		"125"
+	            "TargetTeams" 		"DOTA_UNIT_TARGET_TEAM_ENEMY"
+	            "TargetTypes" 		"DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_HERO"
+	            "TargetFlags" 		"DOTA_UNIT_TARGET_FLAG_NONE"
+	            "HasFrontalCone" 	"0"
+	            "ProvidesVision" 	"0"
+	        }
+	    }
+
+	    "OnProjectileFinish"
+	    {
+	        "ActOnTargets"
+	        {
+	            "Target"
+	            {
+	                "Center" 	"POINT"
+	                "Radius" 	"%radius"
+	                "Teams" 	"DOTA_UNIT_TARGET_TEAM_ENEMY" 
+	                "Types" 	"DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_HERO"
+	            }
+	            "Action"
+	            {
+	                "RunScript"
+	                {
+	                	"ScriptFile"	"scripts/vscripts/classes/player.lua"
+	                	"Function"		"villagerToxicBomb"
+	                }
+	                
+	            }
+	        }
+	    }
+	}
+	//=================================================================================================================
+	// Villager's Ability: Spear Shot
+	//=================================================================================================================
+	"spear_shot"
+	{
+		"BaseClass" 				"ability_datadriven" 
+	    "AbilityBehavior" 			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	    "AbilityUnitTargetTeam" 	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+	    "AbilityUnitTargetType" 	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+	    "AbilityUnitDamageType" 	"DAMAGE_TYPE_PHYSICAL"
+	    "OnSpellStart"
+	    {
+	    	"FireEffect"
+		    {
+			    "EffectName" 			"particles/units/heroes/hero_huskar/huska_burning_spear.vpcf"
+		        "EffectAttachType" 		"attach_hitloc"
+		        "Target" 				"TARGET"
+		        "ControlPointEntities"
+		        {
+		            "TARGET" "attach_hitloc" 
+		            "TARGET" "attach_hitloc"
+		            "TARGET" "attach_hitloc"
+		            "TARGET" "attach_hitloc"
+		        } 
+		    }
+	    } 
+	}
+
+	//=================================================================================================================
+	// Villager's Ability: Fish Net
+	//=================================================================================================================
+	"fish_net"
+	{
+		"BaseClass"             		"naga_siren_ensnare"
+		"AbilityTextureName"			"Gaben"
+		"MaxLevel" 						"1"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"duration"					"12.0"	// Damn, so OP
+			}
+			"02"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"net_speed"					"1500"
+			}
+			"03"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"fake_ensnare_distance"		"900"	
+			}
+		}
+	}
+
+	//=================================================================================================================
+	// Villager's Ability: Transmute 
+	//=================================================================================================================
+	"midas"
+	{
+		//"BaseClass"             		"ability_datadriven"
+		//"AbilityTextureName"			"Gaben"
+		//"MaxLevel" 						"1"
+		//"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		//"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		//"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_BASIC"
+
+		//"OnSpellStart"
+		//{
+		//	"RunScript"
+		//	{
+		//		"ScriptFile"	"scripts/vscripts/classes/player.lua"
+        //    	"Function"		"villagerMidas"
+		//	}
+		//	
+		//}
+						
+	}
+
+	//=================================================================================================================
+	// Werewolf's Ability: Acute Sense
+	//=================================================================================================================
 	"acute_sense"
 	{
 		"BaseClass"						"ability_datadriven"
@@ -36,6 +276,9 @@
 		}
 	}
 
+	//=================================================================================================================
+	// Werewolf's Ability: Sprint
+	//=================================================================================================================
 	"sprint"
 	{
 		"BaseClass"						"ability_datadriven"
@@ -69,6 +312,9 @@
 		}
 	}
 
+	//=================================================================================================================
+	// Werewolf's Ability: Tremendous Strength
+	//=================================================================================================================
 	"tremendous_strength"
 	{
 		"BaseClass"						"ability_datadriven"
@@ -99,6 +345,9 @@
 		}
 	}
 
+	//=================================================================================================================
+	// Werewolf's Ability: Prowl
+	//=================================================================================================================
 	"prowl"
 	{
 		"BaseClass"						"ability_datadriven"
@@ -186,58 +435,9 @@
 		}
 	}
 	
-	"werewolf"
-	{
-		"BaseClass"						"lycan_shapeshift"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
-		"FightRecapLevel"				"2"
-
-		// Time		
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCooldown"				"0"
-		"IsHidden"						"1"
-
-		// Cost
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityManaCost"				"0"		
-
-		// Special
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilitySpecial"
-		{
-			"01"
-			{
-				"var_type"					"FIELD_FLOAT"
-				"duration"					"240"
-			}
-			"02"
-			{
-				"var_type"					"FIELD_INTEGER"
-				"speed"						"400"
-			}
-			"03"
-			{
-				"var_type"					"FIELD_INTEGER"
-				"bonus_night_vision"		"1000"
-			}
-			"04"
-			{
-				"var_type"					"FIELD_INTEGER"
-				"crit_chance"				"30 30 30"
-			}
-			"05"
-			{
-				"var_type"					"FIELD_INTEGER"
-				"crit_damage"				"170 170 170"
-			}
-			"06"
-			{
-				"var_type"					"FIELD_FLOAT"
-				"transformation_time"		"0"
-			}			
-		}
-	}
-
+	//=================================================================================================================
+	// Dummy's Ability: BH Dummy Unit
+	//=================================================================================================================
 	"bh_dummy_unit"
 	{
 		"AbilityBehavior" 		"DOTA_ABILITY_BEHAVIOR_PASSIVE"
@@ -272,7 +472,9 @@
 		}
 	}
 
-
+	//=================================================================================================================
+	// Debug's Ability: Spawn Worker
+	//=================================================================================================================
 	"spawn_worker_TEST"
 	{
 		"BaseClass"						"ability_datadriven"
@@ -305,6 +507,9 @@
     //    }
     //}
 
+    //=================================================================================================================
+	// Villager's Ability: Lumber Collector 0
+	//=================================================================================================================
 	"wwt_lumber_collector0"
 	{
 		// General
@@ -325,6 +530,9 @@
 	    }
 	}
 
+	//=================================================================================================================
+	// Villager's Ability: Lumber Collector 1
+	//=================================================================================================================
 	"wwt_lumber_collector1"
 	{
 		// General
@@ -345,6 +553,9 @@
 	    }
 	}
 
+	//=================================================================================================================
+	// Villager's Ability: Lumber Collector 2
+	//=================================================================================================================
 	"wwt_lumber_collector2"
 	{
 		// General
@@ -365,6 +576,9 @@
 	    }
 	}
 
+	//=================================================================================================================
+	// Villager's Ability: Lumber Collector 3
+	//=================================================================================================================
 	"wwt_lumber_collector3"
 	{
 		// General
@@ -385,6 +599,9 @@
 	    }
 	}
 
+	//=================================================================================================================
+	// Villager's Ability: Lumber Collector 4
+	//=================================================================================================================
 	"wwt_lumber_collector4"
 	{
 		// General
@@ -405,6 +622,9 @@
 	    }
 	}
 
+	//=================================================================================================================
+	// Villager's Ability: Lumber Collector 5
+	//=================================================================================================================
 	"wwt_lumber_collector5"
 	{
 		// General
@@ -425,6 +645,9 @@
 	    }
 	}
 
+	//=================================================================================================================
+	// Villager's Ability: Lumber Collector 6
+	//=================================================================================================================
 	"wwt_lumber_collector6"
 	{
 		// General
@@ -445,6 +668,9 @@
 	    }
 	}
 
+	//=================================================================================================================
+	// Villager's Ability: Lumber Collector 7
+	//=================================================================================================================
 	"wwt_lumber_collector7"
 	{
 		// General
@@ -465,6 +691,9 @@
 	    }
 	}
 
+	//=================================================================================================================
+	// Villager's Ability: Lumber Collector 8
+	//=================================================================================================================
 	"wwt_lumber_collector8"
 	{
 		// General
@@ -485,6 +714,9 @@
 	    }
 	}
 
+	//=================================================================================================================
+	// Debug's Ability: Spawn Farm
+	//=================================================================================================================
 	"spawn_farm_TEST"
 	{
 		
@@ -528,6 +760,9 @@
 		}
 	}
 
+	//=================================================================================================================
+	// Tree's Ability: Tree Ability
+	//=================================================================================================================
 	"tree_ability"
 	{
 		"AbilityBehavior" 		"DOTA_ABILITY_BEHAVIOR_PASSIVE"
