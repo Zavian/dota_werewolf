@@ -1,5 +1,67 @@
 print("[WWT] Functions loaded.")
 
+function differenceFromAngles(alpha, beta)
+    if alpha > beta then
+        return alpha - beta
+    end
+    return beta-alpha
+end
+
+function EquipWeapon(event, newWearable)
+	-- Need to work with the tools
+
+    local hero = event.caster
+    local newWeaponModel = "models/items/necrolyte/heretic_weapon/heretic_weapon.vmdl"
+    if hero.originalWeaponModel == nil then
+    	hero.originalWeaponModel = "models/heroes/sven/sven_sword.vmdl"
+    end
+
+    local model = hero:FirstMoveChild()
+    while model ~= nil do
+        if model:GetClassname() ~= "" and model:GetClassname() == "dota_item_wearable" then
+            local modelName = model:GetModelName()
+            if modelName == hero.originalWeaponModel then
+                -- Set the weapon model, save both the new and original model names in the caster handle to call OnUnequip
+                print("FOUND "..modelName.." SWAPPING TO "..newWeaponModel)
+                hero.originalWeaponModel = modelName
+                hero.weapon = newWeaponModel
+                model:SetModel(newWeaponModel)
+            end
+        end
+        model = model:NextMovePeer()
+        if model ~= nil and model:GetModelName() ~= "" then
+            print("Next Peer:" .. model:GetModelName())
+        end
+    end
+    print("------------------------")
+end
+
+function UnequipWeapon( event )
+	-- Need to work with the tools
+
+    local hero = event.caster
+    local originalWeaponModel = hero.originalWeaponModel
+    local currentWeapon = hero.weapon
+
+    local model = hero:FirstMoveChild()
+    while model ~= nil do
+        if model:GetClassname() ~= "" and model:GetClassname() == "dota_item_wearable" then
+            local modelName = model:GetModelName()
+            -- Set the weapon model back to the original
+            if modelName == currentWeapon then
+                hero.weapon = originalWeaponModel
+                model:SetModel(originalWeaponModel)
+            end
+        end
+        model = model:NextMovePeer()
+        if model ~= nil and model:GetModelName() ~= "" then
+            print("Next Peer:" .. model:GetModelName())
+        end
+    end
+
+    print("------------------------")
+end
+
 function dealDamage(source, target, damage)
     if damage <= 0 or source == nil or target == nil then
 	return

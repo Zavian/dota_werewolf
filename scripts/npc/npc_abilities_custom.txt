@@ -70,8 +70,8 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"			"scripts/vscripts/classes/player.lua"
-				"Function"				"villagerPoseidon"
+				"ScriptFile"			"scripts/vscripts/custom_spells/player.lua"
+				"Function"				"Poseidon_casted"
 				"Duration"				"300"
 				"Cooldown"				"120"
 			}
@@ -151,8 +151,8 @@
 	            {
 	                "RunScript"
 	                {
-	                	"ScriptFile"	"scripts/vscripts/classes/player.lua"
-	                	"Function"		"villagerToxicBomb"
+	                	"ScriptFile"	"scripts/vscripts/custom_spells/player.lua"
+	                	"Function"		"ToxicBomb_casted"
 	                }
 	                
 	            }
@@ -221,12 +221,13 @@
 	//=================================================================================================================
 	"midas"
 	{
-		//"BaseClass"             		"ability_datadriven"
-		//"AbilityTextureName"			"Gaben"
-		//"MaxLevel" 						"1"
-		//"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
-		//"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
-		//"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_BASIC"
+		"BaseClass"             		"item_hand_of_midas"
+		"AbilityTextureName"			"Gaben"
+		"MaxLevel" 						"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS" // All the units above level 5 will be ancients
 
 		//"OnSpellStart"
 		//{
@@ -237,6 +238,133 @@
 		//	}
 		//	
 		//}
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_attack_speed"	"0"
+			}
+			"02"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"xp_multiplier"			"1"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_gold"			"100"
+			}
+		}
+						
+	}
+
+	//=================================================================================================================
+	// Villager's Ability: Awesomeness 
+	//=================================================================================================================
+	"awesome"
+	{
+		"BaseClass"             		"ability_datadriven"
+		"AbilityTextureName"			"Gaben"
+		"MaxLevel" 						"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"Modifiers"
+		{
+			"modifier_awesome"
+			{
+				"Passive"			"1"
+				"IsHidden"			"0"
+				"IsDebuff"			"0"
+		
+				//"EffectName"		"particle_name"
+				//"EffectAttachType"	"follow_origin"
+		
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS" 	"%bonus_stat"
+				    "MODIFIER_PROPERTY_STATS_INTELLECT_BONUS" 	"%bonus_stat" 
+				    "MODIFIER_PROPERTY_STATS_AGILITY_BONUS"		"%bonus_stat"
+				}
+				"OnCreated"
+				{
+					"RunScript"
+					{
+						"ScriptFile"			"scripts/vscripts/custom_spells/player.lua"
+						"Function"				"AwesomeModifier_created"	// This will make wear my hero the vodoo mask
+					}
+				}				
+				
+			}
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"bonus_stat"		"15"
+			}
+		}						
+	}
+
+	//=================================================================================================================
+	// Villager's Ability: Call Dog 
+	//=================================================================================================================
+	"call_dog"
+	{
+		"BaseClass"             		"ability_datadriven"
+		"AbilityTextureName"			"Gaben"
+		"MaxLevel" 						"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"ScriptFile"	"scripts/vscripts/custom_spells/player.lua"
+				"Function"		"CallDog_casted"
+			}
+			
+		}						
+	}
+
+	//=================================================================================================================
+	// Villager's Ability: Scarecrow 
+	//=================================================================================================================
+	"scarecrow"
+	{
+		"BaseClass"             		"ability_datadriven"
+		"AbilityTextureName"			"Gaben"
+		"MaxLevel" 						"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"OnSpellStart"
+		{
+			"SpawnUnit"
+			{
+				"UnitName"		"npc_wwt_scarecrow"
+				"Target" 		"POINT"
+				"Duration"		"%duration"
+				"UnitCount"		"1"
+				"UnitLimit"		"0"
+				"GrantsGold"	"0"
+				"GrantsXP"		"0"
+				"SpawnRadius"	"10"
+				"OnSpawn"
+				{
+					// Need to create the modifier for the scarecrow					
+				}
+			}
+			
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"120.0"
+			}
+		}
+		
 						
 	}
 
@@ -258,8 +386,8 @@
 		{
 			"RunScript"
 			{
-				"ScriptFile"			"scripts/vscripts/classes/player.lua"
-				"Function"				"werewolfAcuteSenseCast"
+				"ScriptFile"			"scripts/vscripts/custom_spells/werewolf.lua"
+				"Function"				"AcuteSense_casted"
 				"Level"					"%level"
 				"Duration"				"4"
 			}
@@ -391,8 +519,8 @@
 
 					"RunScript"
 					{
-						"ScriptFile"			"scripts/vscripts/classes/player.lua"
-						"Function"				"werewolfApplyProwl"
+						"ScriptFile"			"scripts/vscripts/custom_spells/werewolf.lua"
+						"Function"				"ProwlModifier_created"
 					}
 				}
 				"OnAttackLanded"
@@ -409,8 +537,8 @@
 					}
 					"RunScript"
 					{
-						"ScriptFile"			"scripts/vscripts/classes/player.lua"
-						"Function"				"werewolfProwledAttack"
+						"ScriptFile"			"scripts/vscripts/custom_spells/werewolf.lua"
+						"Function"				"Prowl_attack_landed"
 						"Damage"				"%attack_damage"
 						"BonusDamage"			"%bonus_damage"
 						"DefaultHull"			"%default_hull"
@@ -486,7 +614,7 @@
 		"OnSpellStart"
 		{
 			"RunScript"
-			{
+			{	// This MUST go in the classes file for order purposes. DON'T CHANGE CLASSES TO CUSTOM_SPELLS
 				"Target"				"POINT"
 				"ScriptFile"			"scripts/vscripts/classes/player.lua"
 				"Function"				"summonDetect"
@@ -740,7 +868,7 @@
 		"OnSpellStart"
 		{
 			"RunScript"
-			{
+			{	// This MUST go in the classes file for order purposes. DON'T CHANGE CLASSES TO CUSTOM_SPELLS
 				"Target"				"POINT"
 				"ScriptFile"			"scripts/vscripts/classes/player.lua"
 				"Function"				"buildDetect"
