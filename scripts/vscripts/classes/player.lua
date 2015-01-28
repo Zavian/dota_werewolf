@@ -15,7 +15,7 @@ function Player.create(id, lumber)
 					"fish_net", "midas", "awesome", "call_dog", "scarecrow"}
 	plr.learnedHumanSpells = {"wwt_lumber_collector0", "adrenaline_rush"}
 
-	plr._WerewolfSpells = {"prowl", "trmendous_strength", "sprint", "acute_sense"}
+	plr._WerewolfSpells = {"prowl", "trmendous_strength", "sprint", "acute_sense", "cannibalistic_urges"}
 
 	plr.id = id 			-- Player's ID (ranging from 0 to 9)
 	plr.lumber = lumber 	-- Player's lumber

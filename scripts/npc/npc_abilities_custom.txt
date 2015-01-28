@@ -11,7 +11,7 @@
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
 		"MaxLevel"						"1"
-		"AbilityTextureName"    		"Gaben"
+		"AbilityTextureName"    		"adrenaline_rush"
 
 
 		"OnSpellStart"
@@ -20,7 +20,6 @@
 			{
 				"ModifierName"	"modifier_item_mask_of_madness"
 				"Target" 		"CASTER"
-				"Duration"		"%duration"
 			}
 			
 		}
@@ -164,6 +163,11 @@
 	//=================================================================================================================
 	"spear_shot"
 	{
+		"precache"
+		{
+			"particle"  "particles/units/heroes/hero_huskar/huskar_base_attack.vpcf"
+		}
+		
 		"BaseClass" 				"ability_datadriven" 
 	    "AbilityBehavior" 			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 	    "AbilityUnitTargetTeam" 	"DOTA_UNIT_TARGET_TEAM_ENEMY"
@@ -171,19 +175,17 @@
 	    "AbilityUnitDamageType" 	"DAMAGE_TYPE_PHYSICAL"
 	    "OnSpellStart"
 	    {
-	    	"FireEffect"
-		    {
-			    "EffectName" 			"particles/units/heroes/hero_huskar/huska_burning_spear.vpcf"
-		        "EffectAttachType" 		"attach_hitloc"
-		        "Target" 				"TARGET"
-		        "ControlPointEntities"
-		        {
-		            "TARGET" "attach_hitloc" 
-		            "TARGET" "attach_hitloc"
-		            "TARGET" "attach_hitloc"
-		            "TARGET" "attach_hitloc"
-		        } 
-		    }
+	    	"TrackingProjectile"
+	    	{
+	    		"Target"           	"TARGET"
+	    		"EffectName"		"particles/units/heroes/hero_huskar/huskar_base_attack.vpcf"
+	    		"Dodgeable"			"0"
+	    		"ProvidesVision"	"1"
+	    		"VisionRadius"		"150"
+	    		"MoveSpeed"        	"800"
+	    		"SourceAttachment"	"DOTA_PROJECTILE_ATTACHMENT_ATTACK_1"
+	    	}
+	    	
 	    } 
 	}
 
@@ -438,6 +440,55 @@
 				"bonus_speed"			"10 20 30 40"
 			}
 		}
+	}
+
+	//=================================================================================================================
+	// Werewolf's Ability: Cannibalistic Urges
+	//=================================================================================================================
+	"cannibalistic_urges"
+	{
+		"precache"
+		{
+			"particle"  "particles/units/heroes/hero_life_stealer/life_stealer_open_wounds_core_ground.vpcf"
+		}
+		
+		"BaseClass"             		"ability_datadriven"
+		"AbilityTextureName"			"cannibalistic_urges"
+		"MaxLevel" 						"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"Modifiers"
+		{
+			"modifier_cannibalistic_urges"
+			{
+				"Passive"			"1"
+				"IsHidden"			"0"
+				"IsDebuff"			"0"
+		
+				"EffectName"		"particles/units/heroes/hero_life_stealer/life_stealer_open_wounds_core_ground.vpcf"
+				"EffectAttachType"	"follow_origin"
+		
+				"OnAttackLanded"
+				{
+					"Lifesteal"
+					{
+						"Target"            "ATTACKER"
+						"LifestealPercent"	"%lifesteal"
+					}
+					
+				}
+				
+			}
+		}
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"lifesteal"			"15"
+			}
+		}
+		
+						
 	}
 
 	//=================================================================================================================

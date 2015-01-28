@@ -145,6 +145,7 @@ function WWT:NightComes()
 
 		local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()
 		Players[theWerewolf]:transform(hero, true)
+		PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():FindAbilityByName("cannibalistic_urges"):SetLevel(1)
 	end
 end
 
@@ -209,7 +210,7 @@ function WWT:OnEntitySpawn(keys)
 				hero:SetGold(0, false)	-- Resetting hero's gold
 				hero:SetGold(150, true)
 				hero:FindAbilityByName("wwt_lumber_collector0"):SetLevel(1)
-
+				hero:FindAbilityByName("adrenaline_rush"):SetLevel(1)
 				
 				playerID = hero:GetPlayerOwnerID()
 
@@ -278,6 +279,19 @@ function WWT:RegisterCommands()
 	        return array
 	    end
 	end, "Player names", 0 )
+
+	Convars:RegisterCommand( "LearnAbility", function(name, p)
+	    --get the player that sent the command
+	    local cmdPlayer = Convars:GetCommandClient()
+	    if cmdPlayer then 
+	        if(DEBUG) then
+	        	if p == "spear_shot" then
+	        		-- This will add the spell to the number 0 hero
+	        		PlayerResource:GetPlayer(0):GetAssignedHero():AddAbility("spear_shot")
+	        	end
+	        end
+	    end
+	end, "Learn an ability. You should be a developer for seeing which abilities you can learn...", 0 )
 end
 
 

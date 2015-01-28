@@ -11,3 +11,5 @@ Players = {}
 Units = {}
 Buildings = {}
 
+DEBUG = true
+
