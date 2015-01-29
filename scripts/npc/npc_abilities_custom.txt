@@ -62,7 +62,7 @@
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
 		"MaxLevel"						"1"
-		"AbilityTextureName"    		"Gaben"
+		"AbilityTextureName"    		"poseidon"
 
 
 		"OnSpellStart"
@@ -89,6 +89,7 @@
 	    "AbilityUnitTargetTeam" 	"DOTA_UNIT_TARGET_TEAM_ENEMY"
 	    "AbilityUnitTargetType" 	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
 	    "AbilityUnitDamageType" 	"DAMAGE_TYPE_MAGICAL"
+	    "AbilityTextureName"		"toxic_bomb"
 
 	    // Stats
 	    //-------------------------------------------------------------------------------------
@@ -173,6 +174,7 @@
 	    "AbilityUnitTargetTeam" 	"DOTA_UNIT_TARGET_TEAM_ENEMY"
 	    "AbilityUnitTargetType" 	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
 	    "AbilityUnitDamageType" 	"DAMAGE_TYPE_PHYSICAL"
+	    "AbilityTextureName"		"spear_shot"
 	    "OnSpellStart"
 	    {
 	    	"TrackingProjectile"
@@ -195,7 +197,7 @@
 	"fish_net"
 	{
 		"BaseClass"             		"naga_siren_ensnare"
-		"AbilityTextureName"			"Gaben"
+		"AbilityTextureName"			"fish_net"
 		"MaxLevel" 						"1"
 
 		"AbilitySpecial"
@@ -267,7 +269,7 @@
 	"awesome"
 	{
 		"BaseClass"             		"ability_datadriven"
-		"AbilityTextureName"			"Gaben"
+		"AbilityTextureName"			"awesome"
 		"MaxLevel" 						"1"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"Modifiers"
@@ -315,7 +317,7 @@
 	"call_dog"
 	{
 		"BaseClass"             		"ability_datadriven"
-		"AbilityTextureName"			"Gaben"
+		"AbilityTextureName"			"call_dog"
 		"MaxLevel" 						"1"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
 		"OnSpellStart"
@@ -335,7 +337,7 @@
 	"scarecrow"
 	{
 		"BaseClass"             		"ability_datadriven"
-		"AbilityTextureName"			"Gaben"
+		"AbilityTextureName"			"scarecrow"
 		"MaxLevel" 						"1"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
 		"OnSpellStart"
@@ -381,7 +383,7 @@
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
 		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
 		"MaxLevel"						"2"
-		"AbilityTextureName"    		"Gaben"
+		"AbilityTextureName"    		"acute_sense"
 
 
 		"OnSpellStart"
@@ -414,7 +416,7 @@
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"MaxLevel"						"4"
-		"AbilityTextureName"    		"Gaben"
+		"AbilityTextureName"    		"sprint"
 
 
 		"Modifiers"    				
@@ -499,7 +501,7 @@
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"MaxLevel"						"4"
-		"AbilityTextureName"    		"Gaben"
+		"AbilityTextureName"    		"tremendous_strength"
 
 		"Modifiers"    				
 		{  			
@@ -531,6 +533,7 @@
 	{
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"prowl"
 
 		// Time		
 		//-------------------------------------------------------------------------------------------------------------
@@ -559,7 +562,7 @@
 				"IsPurgable"				"0"
 				"IsStunDebuff"				"0"
 				"IsHidden"					"0"
-				"TextureName"				"Gaben"
+				"TextureName"				"prowl"
 				"OnCreated"
 				{
 					"ApplyModifier"
@@ -590,7 +593,7 @@
 					{
 						"ScriptFile"			"scripts/vscripts/custom_spells/werewolf.lua"
 						"Function"				"Prowl_attack_landed"
-						"Damage"				"%attack_damage"
+						"Damage"				"%attack_damage" // This one is for the engine
 						"BonusDamage"			"%bonus_damage"
 						"DefaultHull"			"%default_hull"
 					}
@@ -604,12 +607,12 @@
 			"01"
 			{
 				"var_type"		"FIELD_INTEGER"
-				"bonus_damage"	"40"
+				"bonus_damage"	"40" //80 120 160 ?
 			}
 			"02"
 			{
 				"var_type"		"FIELD_INTEGER"
-				"bonus_damage"	"8"
+				"default_hull"	"8"
 			}
 		}
 	}
