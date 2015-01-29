@@ -64,6 +64,8 @@
 		"MaxLevel"						"1"
 		"AbilityTextureName"    		"poseidon"
 
+		// particles/units/heroes/hero_alchemist/alchemist_unstableconcoction_bubbles.vpcf
+
 
 		"OnSpellStart"
 		{
@@ -84,12 +86,13 @@
 	{
 		// General
 	    //-------------------------------------------------------------------------------------
-	    "BaseClass" 				"ability_datadriven" 
+	    "BaseClass" 				"alchemist_acid_spray" 
 	    "AbilityBehavior" 			"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
 	    "AbilityUnitTargetTeam" 	"DOTA_UNIT_TARGET_TEAM_ENEMY"
 	    "AbilityUnitTargetType" 	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
 	    "AbilityUnitDamageType" 	"DAMAGE_TYPE_MAGICAL"
 	    "AbilityTextureName"		"toxic_bomb"
+	    "MaxLevel"					"1"
 
 	    // Stats
 	    //-------------------------------------------------------------------------------------
@@ -97,67 +100,34 @@
 
 	    // Special
 	    //-------------------------------------------------------------------------------------
-	    "AbilitySpecial"
-	    {
-	        "01"
-	        {
-	            "var_type" "FIELD_INTEGER"
-	            "distance" "600"
-	        }
-	        "02"
-	        {
-	            "var_type" 	"FIELD_INTEGER"
-	            "radius" 	"200"
-	        }
-	    }
-
-	    "precache"
-	    {
-	        "particle" "particles/units/heroes/hero_mirana/mirana_spell_arrow.vpcf"
-	    }
-
-	    // Data Driven
-	    //-------------------------------------------------------------------------------------
-	    "OnSpellStart"
-	    {
-	        "LinearProjectile"
-	        {
-	            "Target" 			"POINT"
-	            "EffectName" 		"particles/units/heroes/hero_mirana/mirana_spell_arrow.vpcf"
-	            "MoveSpeed" 		"600"
-	            "StartRadius" 		"125"
-	            "StartPosition" 	"attach_attack1"
-	            "EndRadius" 		"125"
-	            "TargetTeams" 		"DOTA_UNIT_TARGET_TEAM_ENEMY"
-	            "TargetTypes" 		"DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_HERO"
-	            "TargetFlags" 		"DOTA_UNIT_TARGET_FLAG_NONE"
-	            "HasFrontalCone" 	"0"
-	            "ProvidesVision" 	"0"
-	        }
-	    }
-
-	    "OnProjectileFinish"
-	    {
-	        "ActOnTargets"
-	        {
-	            "Target"
-	            {
-	                "Center" 	"POINT"
-	                "Radius" 	"%radius"
-	                "Teams" 	"DOTA_UNIT_TARGET_TEAM_ENEMY" 
-	                "Types" 	"DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_HERO"
-	            }
-	            "Action"
-	            {
-	                "RunScript"
-	                {
-	                	"ScriptFile"	"scripts/vscripts/custom_spells/player.lua"
-	                	"Function"		"ToxicBomb_casted"
-	                }
-	                
-	            }
-	        }
-	    }
+	   "AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"radius"				"200"
+			}
+			"02"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"duration"				"15.0"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"damage"				"10"
+			}
+			"04"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"armor_reduction"		"5"
+			}
+			"05"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"tick_rate"				"1.0"
+			}
+		}
 	}
 	//=================================================================================================================
 	// Villager's Ability: Spear Shot
