@@ -7,19 +7,23 @@ function differenceFromAngles(alpha, beta)
     return beta-alpha
 end
 
-function EquipWeapon(event, newWearable)
-	-- Need to work with the tools
+function EquipWeapon(event)
 
     local hero = event.caster
-    local newWeaponModel = "models/items/necrolyte/heretic_weapon/heretic_weapon.vmdl"
+    local newWeaponModel = "models/items/witchdoctor/tribal_mask.vmdl"
     if hero.originalWeaponModel == nil then
-    	hero.originalWeaponModel = "models/heroes/sven/sven_sword.vmdl"
+    	hero.originalWeaponModel = "models/heroes/omniknight/hair.vmdl"
     end
 
     local model = hero:FirstMoveChild()
+    local test = hero:GetChildren()
+    --for i=1,table.getn(test) do
+    --	print(test[i]:GetClassname())
+    --end
     while model ~= nil do
         if model:GetClassname() ~= "" and model:GetClassname() == "dota_item_wearable" then
             local modelName = model:GetModelName()
+            --print(modelName)
             if modelName == hero.originalWeaponModel then
                 -- Set the weapon model, save both the new and original model names in the caster handle to call OnUnequip
                 print("FOUND "..modelName.." SWAPPING TO "..newWeaponModel)
@@ -172,8 +176,10 @@ function OnStartTouch(trigger)
 		false
 	)
 	trigger.activator:Stop()
-	SendToConsole("dota_camera_center")
-	SendToConsole("-dota_camera_follow")
+	if(trigger.activator:IsHero()) then
+		SendToConsole("dota_camera_center")
+		SendToConsole("-dota_camera_follow")
+	end
 end
 
 function createTrees()

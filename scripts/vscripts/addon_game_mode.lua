@@ -17,6 +17,9 @@ function Precache( context )	-- Function to Precache models that aren't in spell
 	PrecacheModel("models/props_structures/bridge_statue001.vmdl", context)
 	PrecacheModel("models/props_debris/shop_set_seat001.vmdl", context)
 	PrecacheModel("models/heroes/lycan/lycan_wolf.vmdl", context)
+	PrecacheModel("models/items/witchdoctor/tribal_mask.vmdl", context) --[[Returns:void
+	( modelName, context ) - Manually precache a single model
+	]]
 	PrecacheResource("model_folder", "models/heroes/lycan", context)
 
 	--[[
@@ -137,8 +140,8 @@ end
 function WWT:NightComes() 
 	thereIsNoWolf = false
 	if(theWerewolf == nil) then
-		local a = getSetuppedPlayers()									-- Deciding who'll be the wolf
-		if(a[1] ~= nil) then --if the array has something
+		local a = getSetuppedAndAlivePlayers()									-- Deciding who'll be the wolf
+		if(a[1] ~= nil) then 											--if the array has something
 			theWerewolf = a[math.random(a[1], table.getn(a))]			-- Getting the possible players that can be the wolf
 			print("The werewolf is the player number " .. theWerewolf)
 		end
@@ -210,7 +213,7 @@ function WWT:OnEntitySpawn(keys)
 				hero:SetGold(0, false)	-- Resetting hero's gold
 				hero:SetGold(150, true)
 				hero:FindAbilityByName("wwt_lumber_collector0"):SetLevel(1)
-				hero:FindAbilityByName("adrenaline_rush"):SetLevel(1)
+				--hero:FindAbilityByName("adrenaline_rush"):SetLevel(1)
 				
 				playerID = hero:GetPlayerOwnerID()
 

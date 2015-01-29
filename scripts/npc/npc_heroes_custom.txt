@@ -26,7 +26,7 @@
 		"Ability1"					"wwt_lumber_collector0"						// Ability 1
 		"Ability2"					"spawn_farm_TEST"							// Ability 2
 		"Ability3"					"spawn_worker_TEST"							// Ability 2
-		"Ability4"					"toxic_bomb"								// Ability 4
+		"Ability4"					"awesome"								// Ability 4
 		//"Ability15"					"werewolf"
 		//"VisionNighttimeRange"	"1800"										// Range of vision at night time.
 		"ModelScale"				"0.7"										// Scale of the assigned model

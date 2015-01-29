@@ -36,12 +36,14 @@ end
 --[[
 	This will return an array of the players that have spawned
 ]]
-function getSetuppedPlayers()
+function getSetuppedAndAlivePlayers()
 	local array = {}
 	for i=0, (DOTA_MAX_TEAM_PLAYERS-1) do
 		if(Players[i] ~= nil) then
 			if(Players[i]:isSet()) then
-				table.insert(array, i)
+				if(Players[i]:IsAlive()) then
+					table.insert(array, i)
+				end
 			end
 		end
 	end

@@ -423,7 +423,7 @@
 		"AttributeBaseAgility"		"0"			// Base agility
 		"AttributeAgilityGain"		"0"			// Agility bonus per level.
 		"StatusHealth"				"1000000"	// Base health.
-		"StatusHealthRegen"			"100000.0"		// Health regeneration rate.
+		"StatusHealthRegen"			"1000.0"		// Health regeneration rate.
 
 		// Bounty
 		//----------------------------------------------------------------
