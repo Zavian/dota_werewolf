@@ -81,22 +81,98 @@
 	//=================================================================================================================
 	"poseidon"
 	{
+		"precache"
+		{
+			"particle"  "particles/units/heroes/hero_wisp/wisp_relocate_marker.vpcf"
+		}
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
 		"MaxLevel"						"1"
 		"AbilityTextureName"    		"poseidon"
 
-		// particles/units/heroes/hero_alchemist/alchemist_unstableconcoction_bubbles.vpcf
+		// 
 
 
 		"OnSpellStart"
 		{
-			"RunScript"
+			"ApplyModifier"
 			{
-				"ScriptFile"			"scripts/vscripts/custom_spells/player.lua"
-				"Function"				"Poseidon_casted"
-				"Duration"				"300"
-				"Cooldown"				"120"
+				"ModifierName"	"modifier_poseidon"
+				"Target" 		"CASTER"
+				"Duration"		"%duration"
+			}
+		}
+		"Modifiers"
+		{
+			"modifier_poseidon"
+			{
+				"Passive"			"0"
+				"IsHidden"			"0"
+				"IsDebuff"			"0"
+		
+				//"EffectName"		"particles/econ/items/kunkka/divine_anchor/hero_kunkka_dafx_skills/kunkka_spell_torrent_bubbles_fxset.vpcf"
+				//"EffectAttachType"	"attach_hitloc"
+
+				"States"
+				{
+					"MODIFIER_STATE_NO_HEALTH_BAR"		"MODIFIER_STATE_VALUE_ENABLED"
+				}
+
+				"OnCreated"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/custom_spells/player.lua"
+						"Function"		"Poseidon_created"
+					}
+					//"FireEffect"
+					//{
+					//	"EffectName"        "particles/units/heroes/hero_wisp/wisp_relocate_marker.vpcf"
+					//	"EffectAttachType"  "attach_hitloc"
+					//	"Target"            "CASTER"
+					//}
+				}
+				"OnDestroy"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/custom_spells/player.lua"
+						"Function"		"Poseidon_destroyed"
+						"Cooldown"		"120.0"
+					}
+				}
+			}
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"duration"			"300"
+			}
+		}
+	}
+
+	//=================================================================================================================
+	// Villager's Ability: Nothin’ but the fish (Get out)
+	//=================================================================================================================
+	"poseidon_remove"
+	{
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"MaxLevel"						"1"
+		"AbilityTextureName"    		"poseidon_remove"
+
+		// 
+
+
+		"OnSpellStart"
+		{
+			"RemoveModifier"
+			{
+				"ModifierName"	"modifier_poseidon"
+				"Target" 		"CASTER"
 			}
 		}
 	}

@@ -3,6 +3,54 @@
 	/=================================================================================================================
 	// Deal Damage - Item used for applying data driven modifiers
 	//=================================================================================================================
+	"item_unselectable"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"ID"							"1124"	// unique ID number for this item.  Do not change this once established or it will invalidate collected stats.
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
+		"AbilityUnitTargetTeam"         "DOTA_UNIT_TARGET_TEAM_BOTH"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO"
+		"Model"							"models/props_gameplay/salve_blue.mdl"
+		"BaseClass"						"item_datadriven"
+		"AbilityTextureName"			"item_greater_clarity"
+		"ItemKillable"					"0"
+
+		"ItemBaseLevel"					"10"
+		"MaxUpgradeLevel"				"20"
+
+		// Stats
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastRange"				"9999"
+		"AbilityCastPoint"				"0.0"
+		
+		// Item Info
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemCost"						"90"
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+		"ItemStackable"					"1"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE_STACKING"
+		"ItemPermanent"					"0"
+		"ItemInitialCharges"			"1"
+		"SideShop"						"1"
+		"Modifiers"
+	    {
+			"unselectable"
+			{
+			    "Passive"				"1"
+			    "States"
+			    {
+			    	"MODIFIER_STATE_UNSELECTABLE"		"MODIFIER_STATE_VALUE_ENABLED"
+			    	"MODIFIER_STATE_NO_HEALTH_BAR"		"MODIFIER_STATE_VALUE_ENABLED"
+			    }
+			}
+		}
+	}
+
+	/=================================================================================================================
+	// Deal Damage - Item used for applying data driven modifiers
+	//=================================================================================================================
 	"item_deal_damage"
 	{
 		// General

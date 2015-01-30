@@ -84,6 +84,11 @@ function dealDamage(source, target, damage)
     item = nil
 end
 
+function makeUnselectable(source, target)
+    local item = CreateItem( "item_unselectable", source, source)
+	item:ApplyDataDrivenModifier( source, target, "unselectable", {duration=0} )
+end
+
 
 function selectPlayerOrUnit(o, requestedType)
 	--[[

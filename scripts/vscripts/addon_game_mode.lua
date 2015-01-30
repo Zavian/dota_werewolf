@@ -21,6 +21,7 @@ function Precache( context )	-- Function to Precache models that aren't in spell
 	( modelName, context ) - Manually precache a single model
 	]]
 	PrecacheResource("model_folder", "models/heroes/lycan", context)
+	PrecacheResource("particle", "particles/units/heroes/hero_wisp/wisp_relocate_marker.vpcf", context)
 
 	--[[
 		Precache things we know we'll use.  Possible file types include (but not limited to):
@@ -288,13 +289,29 @@ function WWT:RegisterCommands()
 	    local cmdPlayer = Convars:GetCommandClient()
 	    if cmdPlayer then 
 	        if(DEBUG) then
-	        	if p == "spear_shot" then
-	        		-- This will add the spell to the number 0 hero
-	        		PlayerResource:GetPlayer(0):GetAssignedHero():AddAbility("spear_shot")
-	        	end
+	        	PlayerResource:GetPlayer(0):GetAssignedHero():AddAbility(p)
+	        	PlayerResource:GetPlayer(0):GetAssignedHero():FindAbilityByName(p):SetLevel(1)
 	        end
 	    end
 	end, "Learn an ability. You should be a developer for seeing which abilities you can learn...", 0 )
+	Convars:RegisterCommand( "UnlearnAbility", function(name, p)
+	    --get the player that sent the command
+	    local cmdPlayer = Convars:GetCommandClient()
+	    if cmdPlayer then 
+	        if(DEBUG) then
+	        	PlayerResource:GetPlayer(0):GetAssignedHero():RemoveAbility(p)
+	        end
+	    end
+	end, "Unlearn an ability. You should be a developer for seeing which abilities you can unlearn...", 0 )
+	Convars:RegisterCommand( "RemoveModifier", function(name, p)
+	    --get the player that sent the command
+	    local cmdPlayer = Convars:GetCommandClient()
+	    if cmdPlayer then 
+	        if(DEBUG) then
+	        	PlayerResource:GetPlayer(0):GetAssignedHero():RemoveModifierByName(p)
+	        end
+	    end
+	end, "Remove modifier. You should be a developer for seeing which modifier you can remove...", 0 )
 end
 
 
