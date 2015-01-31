@@ -14,7 +14,7 @@ function Poseidon_created(keys)
 	local particle = ParticleManager:CreateParticle("particles/units/heroes/hero_wisp/wisp_relocate_marker.vpcf", PATTACH_ABSORIGIN_FOLLOW, dummy_unit)
 	ParticleManager:SetParticleControl(particle, 0, dummy_unit:GetAbsOrigin())
 	ParticleManager:SetParticleControl(particle, 1, Vector(particle_radius,0,0))
-	makeUnselectable(dummy_unit, dummy_unit)
+	giveCustomModifier(dummy_unit, dummy_unit, "unselectable")
 	caster.marker = dummy_unit
 
 	caster:RemoveAbility("poseidon")
@@ -40,9 +40,9 @@ function Poseidon_destroyed(keys)
 	caster:FindAbilityByName("poseidon"):StartCooldown(keys.Cooldown)
 end
 
-function ToxicBomb_casted(keys)
-
-end
+--function ToxicBomb_casted(keys)
+--
+--end
 
 function AwesomeModifier_created(keys)
 	EquipWeapon(keys)
@@ -50,4 +50,25 @@ end
 
 function CallDog_casted(keys)
 
+end
+
+function Midas_casted(keys)
+	local target = keys.target
+	if(target:GetLevel() < 5) then
+		giveCustomModifier(keys.caster, target, "midas")
+	else
+		-- Need to create flash error
+		keys.caster:Stop()
+		print("Someone tried to transmute a level 5 or superior")
+	end
+end
+
+function Midas_created(keys)
+	--keys.target:Kill(nil, nil)
+end
+
+function TestSpawnUnit(keys)
+	keys.target:SetTeam(DOTA_TEAM_BADGUYS) --[[Returns:void
+	No Description Set
+	]]
 end

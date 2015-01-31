@@ -84,10 +84,13 @@ function WWT:OnThink()
 			self:NightComes()	-- function that manages the transformation
 		end
 	else 
+		--print("It's daytyime")
 		thereIsNoWolf = true 	-- If it's DayTime
 		if(theWerewolf ~= nil) then
+			print(Players[theWerewolf]:IsNow())
 			local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()
 			if(Players[theWerewolf]:IsNow() == "werewolf") then
+				print("Transforming the werewolf")
 				Players[theWerewolf]:transform(hero, false)	
 			end		
 		end
@@ -139,6 +142,7 @@ function WWT:MultiTeams()
 end
 
 function WWT:NightComes() 
+	print("Entered in NightComes")
 	thereIsNoWolf = false
 	if(theWerewolf == nil) then
 		local a = getSetuppedAndAlivePlayers()									-- Deciding who'll be the wolf
@@ -146,11 +150,10 @@ function WWT:NightComes()
 			theWerewolf = a[math.random(a[1], table.getn(a))]			-- Getting the possible players that can be the wolf
 			print("The werewolf is the player number " .. theWerewolf)
 		end
-
-		local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()
-		Players[theWerewolf]:transform(hero, true)
-		PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():FindAbilityByName("cannibalistic_urges"):SetLevel(1)
 	end
+	local hero = PlayerResource:GetPlayer(theWerewolf):GetAssignedHero()
+	Players[theWerewolf]:transform(hero, true)
+	PlayerResource:GetPlayer(theWerewolf):GetAssignedHero():FindAbilityByName("cannibalistic_urges"):SetLevel(1)
 end
 
 
@@ -313,5 +316,4 @@ function WWT:RegisterCommands()
 	    end
 	end, "Remove modifier. You should be a developer for seeing which modifier you can remove...", 0 )
 end
-
 

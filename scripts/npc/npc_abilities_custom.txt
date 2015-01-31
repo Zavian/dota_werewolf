@@ -409,42 +409,26 @@
 	//=================================================================================================================
 	"midas"
 	{
-		"BaseClass"             		"item_hand_of_midas"
-		"AbilityTextureName"			"Gaben"
+		"precache"
+		{
+			"particle"  "particles/items2_fx/hand_of_midas.vpcf"
+		}
+		"BaseClass"             		"ability_datadriven"
+		"AbilityTextureName"			"midas"
 		"MaxLevel" 						"1"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_BASIC"
-		"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS" // All the units above level 5 will be ancients
+		//"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS" // All the units above level 5 will be ancients
 
-		//"OnSpellStart"
-		//{
-		//	"RunScript"
-		//	{
-		//		"ScriptFile"	"scripts/vscripts/classes/player.lua"
-        //    	"Function"		"villagerMidas"
-		//	}
-		//	
-		//}
-		"AbilitySpecial"
+		"OnSpellStart"
 		{
-			"01"
+			"RunScript"
 			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_attack_speed"	"0"
-			}
-			"02"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"xp_multiplier"			"1"
-			}
-			"03"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_gold"			"100"
-			}
-		}
-						
+				"ScriptFile"	"scripts/vscripts/custom_spells/player.lua"
+				"Function"		"Midas_casted"
+			}	
+		}						
 	}
 
 	//=================================================================================================================
@@ -1157,6 +1141,66 @@
 					"MODIFIER_STATE_INVULNERABLE"         "MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_NOT_ON_MINIMAP"       "MODIFIER_STATE_VALUE_ENABLED"
 				}
+			}
+		}
+	}
+
+	"spawn_ancient_TEST"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"BaseClass"             		"ability_datadriven"
+		"AbilityTextureName"			"Gaben"
+		"MaxLevel" 						"1"
+		"OnSpellStart"
+		{
+			"SpawnUnit"
+			{
+				"UnitName"		"npc_wwt_ancient_mob"
+				"Target" 		"POINT"
+				"UnitCount"		"1"
+				"UnitLimit"		"0"
+				"GrantsGold"	"1"
+				"GrantsXP"		"1"
+				"SpawnRadius"	"10"
+				"OnSpawn"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/custom_spells/player.lua"
+						"Function"		"TestSpawnUnit"
+					}
+				}
+
+			}
+		}
+	}
+
+	"spawn_not_ancient_TEST"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"BaseClass"             		"ability_datadriven"
+		"AbilityTextureName"			"Gaben"
+		"MaxLevel" 						"1"
+		"OnSpellStart"
+		{
+			"SpawnUnit"
+			{
+				"UnitName"		"npc_wwt_worker"
+				"Target" 		"POINT"
+				"UnitCount"		"1"
+				"UnitLimit"		"0"
+				"GrantsGold"	"1"
+				"GrantsXP"		"1"
+				"SpawnRadius"	"10"
+				"OnSpawn"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/custom_spells/player.lua"
+						"Function"		"TestSpawnUnit"
+					}
+				}
+
 			}
 		}
 	}

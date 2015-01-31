@@ -16,10 +16,6 @@ function EquipWeapon(event)
     end
 
     local model = hero:FirstMoveChild()
-    local test = hero:GetChildren()
-    --for i=1,table.getn(test) do
-    --	print(test[i]:GetClassname())
-    --end
     while model ~= nil do
         if model:GetClassname() ~= "" and model:GetClassname() == "dota_item_wearable" then
             local modelName = model:GetModelName()
@@ -30,6 +26,26 @@ function EquipWeapon(event)
                 hero.originalWeaponModel = modelName
                 hero.weapon = newWeaponModel
                 model:SetModel(newWeaponModel)
+            end
+        end
+        model = model:NextMovePeer()
+        if model ~= nil and model:GetModelName() ~= "" then
+            print("Next Peer:" .. model:GetModelName())
+        end
+    end
+    print("------------------------")
+end
+
+function RemoveCosmeticsFromWolf(hero)
+    local notToRemove = "models/heroes/lycan/lycan_wolf.vmdl"
+    local model = hero:FirstMoveChild()
+    while model ~= nil do
+        if model:GetClassname() ~= "" and model:GetClassname() == "dota_item_wearable" then
+            local modelName = model:GetModelName()
+            --print(modelName)
+            if modelName ~= notToRemove then
+                print("FOUND "..notToRemove..". REMOVING "..modelName)
+                model:SetModel(nil)
             end
         end
         model = model:NextMovePeer()
@@ -84,9 +100,12 @@ function dealDamage(source, target, damage)
     item = nil
 end
 
-function makeUnselectable(source, target)
-    local item = CreateItem( "item_unselectable", source, source)
-	item:ApplyDataDrivenModifier( source, target, "unselectable", {duration=0} )
+function giveCustomModifier(source, target, modifier, modifierData)
+    local item
+    local modifierData = modifierData or nil
+
+    item = CreateItem( "item_custom_modifiers", source, source)
+	item:ApplyDataDrivenModifier( source, target, modifier, modifierData)
 end
 
 

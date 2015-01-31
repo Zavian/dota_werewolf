@@ -11,7 +11,7 @@
 		"override_hero"				"npc_dota_hero_tidehunter"					// Hero to override
 		"AbilityLayout"				"4"
 		"Ability1"					"wwt_lumber_collector0"						// Ability 1
-		"Ability2"					"spawn_farm_TEST"							// Ability 2
+		"Ability2"					"spawn_ancient_TEST"							// Ability 2
 		"Ability3"					"spawn_worker_TEST"							// Ability 2
 		"Ability4"					""											// Ability 4
 		//"Ability15"					"werewolf"
@@ -32,12 +32,6 @@
 		"ModelScale"				"0.7"										// Scale of the assigned model
 
 		"AttributePrimary"			"DOTA_ATTRIBUTE_STRENGTH"
-		"AttributeBaseStrength"		"30"										// Base strength
-		"AttributeStrengthGain"		"9"										// Strength bonus per level.
-		"AttributeBaseIntelligence"	"20"										// Base intelligence
-		"AttributeIntelligenceGain"	"4"										// Intelligence bonus per level.
-		"AttributeBaseAgility"		"20"										// Base agility
-		"AttributeAgilityGain"		"4"
 	}
 
 	//=================================================================================================================
@@ -47,11 +41,18 @@
 	{
 		"override_hero"				"npc_dota_hero_lycan"
 		"AbilityLayout"				"4"
+		"Model"						"models/heroes/lycan/lycan_wolf.vmdl"
 		"Ability1"					"prowl"
 		"Ability2"					"tremendous_strength"
 		"Ability3"					"sprint"
 		"Ability4"					"acute_sense"
 		"Ability15"					"cannibalistic_urges"
 		"ModelScale"				"0.7"
+		"AttributeBaseStrength"		"30"										// Base strength
+		"AttributeStrengthGain"		"9"										// Strength bonus per level.
+		"AttributeBaseIntelligence"	"20"										// Base intelligence
+		"AttributeIntelligenceGain"	"4"										// Intelligence bonus per level.
+		"AttributeBaseAgility"		"20"										// Base agility
+		"AttributeAgilityGain"		"4"
 	}
 }

@@ -11,11 +11,16 @@ function Player.create(id, lumber)
 	plr.isInWater = false
 	plr.timeInWater = 0
 
+	plr._NOW = "human"
+
 	plr._HumanSpells = {"wwt_lumber_collector0", "adrenaline_rush", "poseidon", "toxic_bomb", "spear_shot",
 					"fish_net", "midas", "awesome", "call_dog", "scarecrow"}
 	plr.learnedHumanSpells = {"wwt_lumber_collector0", "adrenaline_rush"}
 
-	plr._WerewolfSpells = {"prowl", "trmendous_strength", "sprint", "acute_sense", "cannibalistic_urges"}
+	plr._WerewolfSpells = {"prowl", "tremendous_strength", "sprint", "acute_sense", "cannibalistic_urges"}
+
+	plr.humanAbilityPoints = 1
+	plr.werewolfAbilityPoints = 1
 
 	plr.id = id 			-- Player's ID (ranging from 0 to 9)
 	plr.lumber = lumber 	-- Player's lumber
@@ -41,7 +46,7 @@ function getSetuppedAndAlivePlayers()
 	for i=0, (DOTA_MAX_TEAM_PLAYERS-1) do
 		if(Players[i] ~= nil) then
 			if(Players[i]:isSet()) then
-				if(Players[i]:IsAlive()) then
+				if(PlayerResource:GetPlayer(i):GetAssignedHero():IsAlive()) then
 					table.insert(array, i)
 				end
 			end
@@ -54,10 +59,6 @@ function Player:IsNow()
 	return self._NOW
 end
 
-function Player:IsNow(newNow)
-	self._NOW = newNow
-end
-
 function Player:setModel(model)
 	self.MODEL = model
 end
@@ -67,10 +68,12 @@ function Player:getModel()
 end
 
 function Player:transform(hero, toWerewolf)
+	local oldPosition = hero:GetAbsOrigin()
+	local oldFoward = hero:GetForwardVector()
 	if(toWerewolf) then
 		-- Human to Wolf
 		local XP = 0
-		self:IsNow("werewolf")
+		self._NOW = "werewolf"
 		if(self.werewolfXP ~= nil) then
 			XP = self.werewolfXP
 		end
@@ -80,44 +83,52 @@ function Player:transform(hero, toWerewolf)
 
 		self:storeSpells(hero, true)
 
+		
 		PlayerResource:ReplaceHeroWith(self.id, "npc_dota_hero_lycan", 0, XP)	
 		hero = PlayerResource:GetPlayer(self.id):GetAssignedHero()		
-			
-		hero:SetModel("models/heroes/lycan/lycan_wolf.vmdl")
+		--hero:SetModel("models/heroes/lycan/lycan_wolf.vmdl")
 
 		self:learnSpells(hero, true)
-		local modifier = "modifier_lycan_shapeshift"
-		local modifierData = {
-			duration = 240,
-			speed = 400,
-			bonus_night_vision = 0,
-			crit_chance = 0,
-			crit_damage = 0,
-			transformation_time = 0
-		}
-		hero:AddNewModifier(hero, nil, modifier, modifierData)
+
+		--local modifier = "modifier_lycan_shapeshift"
+		--local modifierData = {
+		--	duration = 240,
+		--	speed = 400,
+		--	bonus_night_vision = 0,
+		--	crit_chance = 0,
+		--	crit_damage = 0,
+		--	transformation_time = 0
+		--}
+		--hero:AddNewModifier(hero, nil, modifier, modifierData)
+		--giveCustomModifier(hero, hero, "shapeshift", self.id)
+		RemoveCosmeticsFromWolf(hero)
+
 	else
 		-- Wolf to Human
 		local XP = 0
-		self:IsNow("human")
+		self._NOW = "human"
 		if(self.humanXP ~= nil) then
 			XP = self.humanXP
 		end
 		self.werewolfXP = hero:GetCurrentXP()
 
 		self:storeSpells(hero, false)
-		self:learnSpells(hero, false)
 
-		PlayerResource:ReplaceHeroWith(theWerewolf, "npc_dota_hero_omniknight", self.humanGold, XP)	
+		PlayerResource:ReplaceHeroWith(self.id, "npc_dota_hero_omniknight", self.humanGold, XP)	
 		hero = PlayerResource:GetPlayer(self.id):GetAssignedHero()	
 		-- Need to show the lumber
 		hero:SetModel(self.MODEL)
+
+		self:learnSpells(hero, false)
 	end
+	hero:SetAbsOrigin(oldPosition)
+	hero:SetForwardVector(oldFoward)
 end	
 
 function Player:storeSpells(hero, toWerewolf)
 	if(toWerewolf) then
 		-- Human to Wolf
+		self.humanAbilityPoints = hero:GetAbilityPoints()
 		self.learnedHumanSpells = {}
 		for i = 1, table.getn(self._HumanSpells) do
 			-- If the hero has a level of the ability I will store it
@@ -127,15 +138,15 @@ function Player:storeSpells(hero, toWerewolf)
 				end
 			end
 	    end
+	    print("Spells stored for the human")
+	    PrintTable(self.learnedHumanSpells)
 	else
 		-- Wolf to Human
+		self.werewolfAbilityPoints = hero:GetAbilityPoints()
+		self.learnedWerewolfSpells = {}
 		for i=1,table.getn(self._WerewolfSpells) do
 			if(hero:FindAbilityByName(self._WerewolfSpells[i]):GetLevel() > 0) then
-				-- Spell Name
-				self.learnedWerewolfSpells[i][1] = self._WerewolfSpells[i]
-
-				-- Spell Level
-				self.learnedWerewolfSpells[i][2] = hero:FindAbilityByName(self._WerewolfSpells[i]):GetLevel()
+				self.learnedWerewolfSpells[self._WerewolfSpells[i]] = hero:FindAbilityByName(self._WerewolfSpells[i]):GetLevel()
 			end
 		end
 	end
@@ -145,17 +156,22 @@ function Player:learnSpells(hero, toWerewolf)
 	if(toWerewolf) then
 		-- Human to Wolf
 		if(self.learnedWerewolfSpells ~= nil) then
-			for i=1,4 do
-				hero:FindAbilityByName(learnedWerewolfSpells[i][1]):SetLevel(learnedWerewolfSpells[i][2])
+			for i=1,table.getn(self._WerewolfSpells) do
+				print(self._WerewolfSpells[i])
+				if(self.learnedWerewolfSpells[self._WerewolfSpells[i]] ~= nil) then
+					hero:FindAbilityByName(self._WerewolfSpells[i]):SetLevel(self.learnedWerewolfSpells[self._WerewolfSpells[i]])
+				end
 			end
 		end
+		hero:SetAbilityPoints(self.werewolfAbilityPoints)
 	else
 		-- Wolf to Human
 		if(self.learnedHumanSpells ~= nil) then
-			for i=1,table.getn(learnedHumanSpells) do
-				hero:FindAbilityByName(learnedHumanSpells[i]):SetLevel(1)
+			for i=1,table.getn(self.learnedHumanSpells) do
+				hero:FindAbilityByName(self.learnedHumanSpells[i]):SetLevel(1)
 			end
 		end
+		hero:SetAbilityPoints(self.humanAbilityPoints)
 	end
 end
 

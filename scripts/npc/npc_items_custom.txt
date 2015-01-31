@@ -1,9 +1,6 @@
 "DOTAAbilities"
 {
-	/=================================================================================================================
-	// Deal Damage - Item used for applying data driven modifiers
-	//=================================================================================================================
-	"item_unselectable"
+	"item_custom_modifiers"
 	{
 		// General
 		//-------------------------------------------------------------------------------------------------------------
@@ -44,6 +41,42 @@
 			    	"MODIFIER_STATE_UNSELECTABLE"		"MODIFIER_STATE_VALUE_ENABLED"
 			    	"MODIFIER_STATE_NO_HEALTH_BAR"		"MODIFIER_STATE_VALUE_ENABLED"
 			    }
+			}
+			"midas"
+			{
+				"Passive"			"0"
+				"IsHidden"			"0"
+				"IsDebuff"			"0"
+		
+				"EffectName"		"particles/items2_fx/hand_of_midas.vpcf"
+				"EffectAttachType"	"follow_origin"
+				"OnCreated"
+				{
+					"Damage"
+					{
+						"Target"		"TARGET"
+						"Type"			"DAMAGE_TYPE_PURE"
+						"Damage"		"50000"
+					}
+					"TrackingProjectile"
+					{
+						"Target"           	"CASTER"
+						"EffectName"		"particles/items2_fx/hand_of_midas.vpcf"
+						"Dodgeable"			"0"
+						"ProvidesVision"	"0"
+						"MoveSpeed"        	"900"
+						"SourceAttachment"	"DOTA_PROJECTILE_ATTACHMENT_ATTACK_1"
+					}
+				}
+			}
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"theWerewolfID"		"15" // This is controlled by the scripts
 			}
 		}
 	}
