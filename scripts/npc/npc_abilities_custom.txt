@@ -403,6 +403,94 @@
 			}
 		}
 	}
+	//=================================================================================================================
+	// Villager's Ability: Scarecrow 
+	//=================================================================================================================
+	"scarecrow"
+	{
+		"precache"
+		{
+			"particle"  "particles/units/heroes/hero_death_prophet/death_prophet_ambient_hair.vpcf"
+		}
+		"BaseClass"             		"ability_datadriven"
+		"AbilityTextureName"			"scarecrow"
+		"MaxLevel" 						"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		//"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS" // All the units above level 5 will be ancients
+
+		"OnSpellStart"
+		{
+			"SpawnUnit"
+			{
+				"UnitName"		"npc_wwt_scarecrow"
+				"Target" 		"POINT"
+				"Duration"		"%duration"
+				"UnitCount"		"1"
+				"UnitLimit"		"0"
+				"GrantsGold"	"1"
+				"GrantsXP"		"1"
+				"SpawnRadius"	"10"
+				"OnSpawn"
+				{
+					"ApplyModifier"
+					{
+						"ModifierName"	"modifier_scarecrow"
+						"Target"
+						{
+							"Center"  	"TARGET"
+							"Radius" 	"%radius"
+							"Teams" 	"DOTA_UNIT_TARGET_TEAM_FRIENDLY"
+							"Types" 	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+						}
+					}
+				}
+			}
+		}
+
+		"Modifiers"
+		{
+			"modifier_scarecrow"
+			{
+				"Passive"			"1"
+				"IsHidden"			"0"
+				"IsDebuff"			"0"
+		
+				"EffectName"		"particles/units/heroes/hero_death_prophet/death_prophet_ambient_hair.vpcf"
+				"EffectAttachType"	"follow_origin"
+		
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS" 	   "%bonus_armor"
+				    "MODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT" 	   "%bonus_regen" 
+				}
+			}
+		}	
+
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"duration"			"120"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"bonus_armor"		"10"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"bonus_regen"		"7"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"bonus_regen"		"650"
+			}
+		}					
+	}
 
 	//=================================================================================================================
 	// Villager's Ability: Transmute 
