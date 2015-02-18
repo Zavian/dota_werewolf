@@ -743,7 +743,9 @@ function BuildingHelper:InitializeBuildingEntity(keys)
 	end
 	-- remove gold from playersHero.
 	if playersHero ~= nil then
-		playersHero:SetGold(playersHero:GetGold()-goldCost, false)
+		local newGold = playersHero:GetGold() - cost
+		playersHero:SetGold(0, false)
+		playersHero:SetGold(newGold, true)
 	end
 	buildingTable["abil"]:StartCooldown(cooldown)
 

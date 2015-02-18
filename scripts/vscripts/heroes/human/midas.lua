@@ -4,8 +4,10 @@ function Midas_casted(keys)
 		giveCustomModifier(keys.caster, target, "midas")
 	else
 		-- Need to create flash error
+		FireGameEvent("custom_error_show", { player_ID = keys.caster:GetPlayerID(), "You can't transmute creatures level 5 or superior"})
+		
 		keys.caster:Stop()
-		print("Someone tried to transmute a level 5 or superior")
+		--print("Someone tried to transmute a level 5 or superior")
 	end
 end
 

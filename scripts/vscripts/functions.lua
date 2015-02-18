@@ -57,8 +57,6 @@ function RemoveCosmeticsFromWolf(hero)
 end
 
 function UnequipWeapon( event )
-	-- Need to work with the tools
-
     local hero = event.caster
     local originalWeaponModel = hero.originalWeaponModel
     local currentWeapon = hero.weapon

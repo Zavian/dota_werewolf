@@ -180,7 +180,6 @@
 	{
 		"precache"
 		{
-			// Need to precache ward
 			"model"					"models/props_gameplay/default_ward.mdl"
 		}
 		// General
