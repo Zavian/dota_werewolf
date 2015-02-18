@@ -498,6 +498,138 @@
 			}	
 		}						
 	}
+	"move_to_point_100"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"BaseClass"						"ability_datadriven"
+		"AbilityCastPoint"				"0"
+		"AbilityCooldown"				"0"
+		"AbilityCastRange"				"100"
+		"AbilityCastAnimation"			"ACT_DOTA_DISABLED"
+		"MaxLevel"						"1"
+	
+		"AbilityManaCost"				"0"
+	
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"Target"		"POINT"
+				"ScriptFile"	"scripts/vscripts/classes/player.lua"
+				"Function"		"create_building_entity"
+			}
+		}
+	}
+	"move_to_point_150"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"BaseClass"						"ability_datadriven"
+		"AbilityCastPoint"				"0"
+		"AbilityCooldown"				"0"
+		"AbilityCastRange"				"150"
+		"AbilityCastAnimation"			"ACT_DOTA_DISABLED"
+		"MaxLevel"						"1"
+	
+		"AbilityManaCost"				"0"
+	
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"Target"		"POINT"
+				"ScriptFile"	"scripts/vscripts/classes/player.lua"
+				"Function"		"create_building_entity"
+			}
+		}
+	}
+	"move_to_point_200"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"BaseClass"						"ability_datadriven"
+		"AbilityCastPoint"				"0"
+		"AbilityCooldown"				"0"
+		"AbilityCastRange"				"200"
+		"AbilityCastAnimation"			"ACT_DOTA_DISABLED"
+		"MaxLevel"						"1"
+	
+		"AbilityManaCost"				"0"
+	
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"Target"		"POINT"
+				"ScriptFile"	"scripts/vscripts/classes/player.lua"
+				"Function"		"create_building_entity"
+			}
+		}
+	}
+	"move_to_point_250"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"BaseClass"						"ability_datadriven"
+		"AbilityCastPoint"				"0"
+		"AbilityCooldown"				"0"
+		"AbilityCastRange"				"250"
+		"AbilityCastAnimation"			"ACT_DOTA_DISABLED"
+		"MaxLevel"						"1"
+	
+		"AbilityManaCost"				"0"
+	
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"Target"		"POINT"
+				"ScriptFile"	"scripts/vscripts/classes/player.lua"
+				"Function"		"create_building_entity"
+			}
+		}
+	}
+	"move_to_point_300"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"BaseClass"						"ability_datadriven"
+		"AbilityCastPoint"				"0"
+		"AbilityCooldown"				"0"
+		"AbilityCastRange"				"300"
+		"AbilityCastAnimation"			"ACT_DOTA_DISABLED"
+		"MaxLevel"						"1"
+	
+		"AbilityManaCost"				"0"
+	
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"Target"		"POINT"
+				"ScriptFile"	"scripts/vscripts/classes/player.lua"
+				"Function"		"create_building_entity"
+			}
+		}
+	}
+	"move_to_point_70"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"BaseClass"						"ability_datadriven"
+		"AbilityCastPoint"				"0"
+		"AbilityCooldown"				"0"
+		"AbilityCastRange"				"70"
+		"AbilityCastAnimation"			"ACT_DOTA_DISABLED"
+		"MaxLevel"						"1"
+	
+		"AbilityManaCost"				"0"
+	
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"Target"		"POINT"
+				"ScriptFile"	"scripts/vscripts/classes/player.lua"
+				"Function"		"create_building_entity"
+			}
+		}
+	}
 	//=================================================================================================================
 	// Villager's Ability: Nothin’ but the fish
 	//=================================================================================================================
@@ -714,20 +846,65 @@
 				"SpawnRadius"	"10"
 				"OnSpawn"
 				{
-					// Need to create the modifier for the scarecrow					
+					"ApplyModifier"
+					{
+						"ModifierName"	"modifier_scarecrow"
+						"Target"
+						{
+							"Center"  	"TARGET"
+							"Radius" 	"%radius"
+							"Teams" 	"DOTA_UNIT_TARGET_TEAM_FRIENDLY"
+							"Types" 	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+						}
+					}				
 				}
 			}
 			
 		}
 	
+		"Modifiers"
+		{
+			"modifier_scarecrow"
+			{
+				"Passive"			"1"
+				"IsHidden"			"0"
+				"IsDebuff"			"0"
+		
+				"EffectName"		"particles/units/heroes/hero_death_prophet/death_prophet_ambient_hair.vpcf"
+				"EffectAttachType"	"follow_origin"
+		
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS" 	   "%bonus_armor"
+				    "MODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT" 	   "%bonus_regen" 
+				}
+			}
+		}	
+	
+	
 		"AbilitySpecial"
 		{
 			"01"
 			{
-				"var_type"			"FIELD_FLOAT"
-				"duration"			"120.0"
+				"var_type"			"FIELD_INTEGER"
+				"duration"			"120"
 			}
-		}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"bonus_armor"		"10"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"bonus_regen"		"7"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"bonus_regen"		"650"
+			}
+		}		
 		
 						
 	}
@@ -768,34 +945,42 @@
 		
 		// General
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
 		"BaseClass"						"ability_datadriven"
 		"AbilityTextureName"			"summon_building"
 		"MaxLevel"						"1"
 	
 		// Stats
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"250"
 		"AbilityCastPoint"				"0"
 		"AbilityCooldown"				"0"
 	
 		// Item Info
 		//-------------------------------------------------------------------------------------------------------------
 		"AbilityManaCost"				"0"
+	
+		// BuildingHelper info
+	    "Building"                      "1" //bool
+	    "BuildingSize"                  "3" // this is (3x64) by (3x64) units, so 9 squares.
+	    "BuildTime"                     "5.0"
+	    "AbilityCastRange"              "300"
+	    "UpdateHealth"                  "1" //bool
+	    "Scale"                         "1" //bool
+	    "MaxScale"                      "4"
+	    "PlayerCanControl"              "1" //bool. Should the player issuing this build command be able to control the building once built?
+	    //"CancelsBuildingGhost"            "0" //bool
+	    // Note: if unit uses a npc_dota_hero baseclass, you must use the npc_dota_hero name.
+	    "UnitName"                      "npc_dota_hero_omniknight"
+	    "AbilityCooldown"               "0"
+	    "AbilityGoldCost"               "100"
+	    // End of BuildingHelper info
 		
 		"OnSpellStart"
 		{
 			"RunScript"
 			{	// This MUST go in the classes file for order purposes. DON'T CHANGE CLASSES TO CUSTOM_SPELLS
-				"Target"				"POINT"
 				"ScriptFile"			"scripts/vscripts/classes/player.lua"
-				"Function"				"buildDetect"
-				// Custom parameters
-				"Build"					"building_wwt_farm_TEST"
-				"Scale"					"4"
-				"TimeToBuild"			"5"
-				"Cost"					"100"
-				// Need to add the lumber cost
+				"Function"				"build"
 			}
 		}
 	

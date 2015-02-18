@@ -167,7 +167,8 @@ function Player:learnSpells(hero, toWerewolf)
 	else
 		-- Wolf to Human
 		if(self.learnedHumanSpells ~= nil) then
-			for i=1,table.getn(self.learnedHumanSpells) do
+			for i=1, #self.learnedHumanSpells do
+				print("Human " .. self.id .. "learning " .. self.learnedHumanSpells[i])
 				hero:FindAbilityByName(self.learnedHumanSpells[i]):SetLevel(1)
 			end
 		end
@@ -249,19 +250,19 @@ end
 	This will get the input of all the building creation spells
 	so that can do the magic
 ]]
-function buildDetect(keys)
-	--print(keys.target_points[1])
-	--CreateUnitByName("building_wwt_farm_TEST", keys.target_points[1], true, keys.caster, keys.caster, keys.caster:GetTeam())
-
-	Players[keys.caster:GetPlayerOwnerID()]:build(
-		keys.Build,
-		keys.caster,
-		keys.target_points[1],
-		keys.Cost,
-		keys.TimeToBuild,
-		keys.Scale
-	)
-end
+--function buildDetect(keys)
+--	--print(keys.target_points[1])
+--	--CreateUnitByName("building_wwt_farm_TEST", keys.target_points[1], true, keys.caster, keys.caster, keys.caster:GetTeam())
+--
+--	Players[keys.caster:GetPlayerOwnerID()]:build(
+--		keys.Build,
+--		keys.caster,
+--		keys.target_points[1],
+--		keys.Cost,
+--		keys.TimeToBuild,
+--		keys.Scale
+--	)
+--end
 
 --[[
 	Return: Base's position
@@ -288,43 +289,118 @@ function Player:getUnitById(id)
 	return -1
 end
 
-function Player:build(name, caster, location, cost, buildTime, scale)
+function create_building_entity( keys )
+	BuildingHelper:InitializeBuildingEntity(keys)
+end
+
+
+function build(keys)
 	-- keys.target_points[1]
-	local point = BuildingHelper:AddBuildingToGrid(location, 4, caster)
-	if point == -1 then
-			-- Need to make as3 error
-			print("[WWT] Someone tried to create a building in a random place")
-		return
-	else
-		if(caster:GetGold() >= cost) then
-			local gold = caster:GetGold() - cost
-			caster:SetGold(0, false)
-			caster:SetGold(gold, true)
+	-- local point = BuildingHelper:AddBuildingToGrid(location, 4, caster)
+	-- if point == -1 or point == nil then
+	-- 		-- Need to make as3 error
+	-- 		print("[WWT] Someone tried to create a building in a random place")
+	-- 	return
+	-- else
+	-- 	if(caster:GetGold() >= cost) then
+	-- 		local gold = caster:GetGold() - cost
+	-- 		caster:SetGold(0, false)
+	-- 		caster:SetGold(gold, true)
 
-			local farm = CreateUnitByName(name, point, false, nil, nil, caster:GetTeam())
-			BuildingHelper:AddBuilding(farm)
+	-- 		local farm = CreateUnitByName(name, point, false, nil, nil, caster:GetTeam())
+	-- 		BuildingHelper:AddBuilding(farm)
 
-			if(self.Buildings == nil) then
-				self.Buildings[1] = Building.create(farm:GetEntityIndex(), name, self.id, location)
-			else
-				self.Buildings[table.getn(self.Buildings) + 1] = Building.create(farm:GetEntityIndex(), name, self.id, location)
-			end
+	-- 		if(self.Buildings == nil) then
+	-- 			self.Buildings[1] = Building.create(farm:GetEntityIndex(), name, self.id, location)
+	-- 		else
+	-- 			self.Buildings[table.getn(self.Buildings) + 1] = Building.create(farm:GetEntityIndex(), name, self.id, location)
+	-- 		end
 
-			if(name == BASE_NAME) then
-				local trigger = Entities:FindByName(nil, "baseTrigger")
-				trigger.Name = self.id .. "bTrigger"
-				trigger:SetAbsOrigin(point)
-			end
+	-- 		if(name == BASE_NAME) then
+	-- 			local trigger = Entities:FindByName(nil, "baseTrigger")
+	-- 			trigger.Name = self.id .. "bTrigger"
+	-- 			trigger:SetAbsOrigin(point)
+	-- 		end
 			
 
-			farm:UpdateHealth(buildTime, true, scale)
-			farm:SetControllableByPlayer( caster:GetPlayerID(), true )
-		else
+	-- 		farm:UpdateHealth(buildTime, true, scale)
+	-- 		farm:SetControllableByPlayer( caster:GetPlayerID(), true )
+	-- 	else
 
-			print("[WWT] Someone tried to create a building without money")
-			-- Need to make as3 error
+	-- 		print("[WWT] Someone tried to create a building without money")
+	-- 		-- Need to make as3 error
+	-- 	end
+	-- end
+	local player = keys.caster:GetPlayerOwner()
+	local pID = player:GetPlayerID()
+	player.lumber = Players[pID]:getLumber()
+	local returnTable = BuildingHelper:AddBuilding(keys)
+	--print("Lumber: " .. player.lumber)
+	--print("Stone: " .. player.stone)
+	--handle errors if any
+	if TableLength(returnTable) > 0 then
+		--PrintTable(returnTable)
+		if returnTable["error"] == "not_enough_resources" then
+			local resourceTable = returnTable["resourceTable"]
+			-- resourceTable is like this: {["lumber"] = 3, ["stone"] = 6}
+			-- so resourceName = cost-playersResourceAmount
+			-- the api searches for player[resourceName]. you need to keep this number updated
+			-- throughout your game
+			local firstResource = nil
+			for k,v in pairs(resourceTable) do
+				if not firstResource then
+					firstResource = k
+				end
+				if Debug_BH then
+					print("P" .. pID .. " needs " .. v .. " more " .. k .. ".")
+				end
+			end
+			local capitalLetter = firstResource:sub(1,1):upper()
+			firstResource = capitalLetter .. firstResource:sub(2)
+			FireGameEvent( 'custom_error_show', { player_ID = pID, _error = "Not enough " .. firstResource .. "." } )
+			return
 		end
 	end
+
+	keys:OnConstructionStarted(function(unit)
+		print("Started construction of " .. unit:GetUnitName())
+		-- Unit is the building be built.
+		-- Play construction sound
+		-- FindClearSpace for the builder
+		FindClearSpaceForUnit(keys.caster, keys.caster:GetAbsOrigin(), true)
+		-- start the building with 0 mana.
+		unit:SetMana(0)
+	end)
+	keys:OnConstructionCompleted(function(unit)
+		print("Completed construction of " .. unit:GetUnitName())
+		-- Play construction complete sound.
+		-- Give building its abilities
+		-- add the mana
+		unit:SetMana(unit:GetMaxMana())
+	end)
+
+	-- These callbacks will only fire when the state between below half health/above half health changes.
+	-- i.e. it won't unnecessarily fire multiple times.
+	keys:OnBelowHalfHealth(function(unit)
+		if Debug_BH then
+			print(unit:GetUnitName() .. " is below half health.")
+		end
+	end)
+
+	keys:OnAboveHalfHealth(function(unit)
+		if Debug_BH then
+			print(unit:GetUnitName() .. " is above half health.")
+		end
+	end)
+
+	--[[keys:OnCanceled(function()
+		print(keys.ability:GetAbilityName() .. " was canceled.")
+	end)]]
+
+	-- Have a fire effect when the building goes below 50% health.
+	-- It will turn off it building goes above 50% health again.
+	keys:EnableFireEffect("modifier_jakiro_liquid_fire_burn")
+	player.lumber = nil
 end
 
 function Player.allSet()

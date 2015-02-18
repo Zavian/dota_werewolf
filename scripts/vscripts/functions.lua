@@ -213,14 +213,14 @@ function createTrees()
 
 	local trees = Entities:FindAllByClassname("ent_dota_tree")
 	local count = 0
-	local dummy
-	for i=1, #trees do		
-		dummy = CreateUnitByName("npc_wwt_dummy", trees[i]:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
-		dummy:AddNewModifier(dummy, nil, "modifier_phased", nil)
-		dummy:RemoveModifierByName("modifier_invulnerable")
-		trees[i]:Destroy()
-		count = count + 1
-	end
+	--local dummy
+	--for i=1, #trees do		
+	--	dummy = CreateUnitByName("npc_wwt_dummy", trees[i]:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
+	--	dummy:AddNewModifier(dummy, nil, "modifier_phased", nil)
+	--	dummy:RemoveModifierByName("modifier_invulnerable")
+	--	trees[i]:Destroy()
+	--	count = count + 1
+	--end
 	treesSpawned = true
 	print(count .. " Trees created.")
 
