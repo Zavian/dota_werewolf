@@ -212,19 +212,19 @@ function createTrees()
 	]]
 
 	local trees = Entities:FindAllByClassname("ent_dota_tree")
+	local count = 0
 	local dummy
-	for i=1, table.getn(trees) do
+	for i=1, #trees do		
 		dummy = CreateUnitByName("npc_wwt_dummy", trees[i]:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
 		dummy:AddNewModifier(dummy, nil, "modifier_phased", nil)
 		dummy:RemoveModifierByName("modifier_invulnerable")
-		--dummy:AddAbility("tree_ability")
-		--dummy:FindAbilityByName("tree_ability"):SetLevel(1)
-		--dummy:SetHealth(1000)
-		--dummy:SetBaseHealthRegen(1000.0);
+		trees[i]:Destroy()
+		count = count + 1
 	end
 	treesSpawned = true
-	print(table.getn(trees) - 1 .. " Trees created.")
+	print(count .. " Trees created.")
 
+	count = nil
 	trees = nil
 end
 

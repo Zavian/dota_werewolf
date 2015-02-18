@@ -58,6 +58,8 @@ function WWT:InitGameMode()
 
 	-- Function that setups the console commands
 	self:RegisterCommands()
+
+	self:CreatureSpawner()
 	
 	GameRules:SetHeroRespawnEnabled( false )		-- Heroes can't respawn, I'll manage through code
 	GameRules:SetUseUniversalShopMode( false )		-- The shop can't be accessed
@@ -104,6 +106,24 @@ function WWT:OnThink()
 		GameRules:GetGameModeEntity():SetThink( "assignClasses", self, 0 )
 	end
 	return 1
+end
+
+function WWT:CreatureSpawner()
+	Timers:CreateTimer(function()
+	  while(animalNumber < 50) do
+	  	local a = math.random(1, 2)
+	  	local spawners = Entities:FindByClassname(nil, "info_animal_spawner")
+	  	print("There are " .. #spawners)
+	  	--if a == 1 then
+	  		-- Spawning one doe
+
+	  	--else if a == 2 then
+
+	  	--end
+	  end
+	  return _WildlifeSpawnRate
+	end
+	)
 end
 
 function WWT:MultiTeams()

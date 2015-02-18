@@ -7,6 +7,10 @@ MAP_SIZE = 8164*2
 theWerewolf = nil
 thereIsNoWolf = true
 
+animalNumber = 0
+
+_WildlifeSpawnRate = 15.0
+
 Players = {}
 Units = {}
 Buildings = {}
