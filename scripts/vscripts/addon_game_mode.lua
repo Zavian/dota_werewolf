@@ -18,6 +18,9 @@ function Precache( context )	-- Function to Precache models that aren't in spell
 	]]
 	PrecacheResource("model_folder", "models/heroes/lycan", context)
 	PrecacheResource("particle", "particles/units/heroes/hero_wisp/wisp_relocate_marker.vpcf", context)
+	PrecacheResource("particle", "particles/ghost_model.vpcf", context)
+	PrecacheResource("particle", "particles/square_projected.vpcf", context)
+	PrecacheResource("particle", "particles/square_sprite.vpcf", context)
 
 	--[[
 		Precache things we know we'll use.  Possible file types include (but not limited to):

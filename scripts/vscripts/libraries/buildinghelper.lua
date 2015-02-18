@@ -345,16 +345,12 @@ function BuildingHelper:AddBuilding(keys)
 	player.lastCursorCenter = OutOfWorldVector
 
 	function player:BeginGhost()
-		print("Started BeginGost")
 		if not player.cursorStream then
-			print("Entered BeginGost")
 			local delta = .03
 			local start = false
 			player.cursorStream = FlashUtil:RequestDataStream( "cursor_position_world", delta, pID, function(playerID, cursorPos)
 				local validPos = true
 				-- Remember, our blocked squares are defined according to the square's center.
-				PrintTable(cursorPos)
-				print(cursorPos.x ..  " " .. cursorPos.y .. " " .. cursorPos.z)
 				if cursorPos.x > 30000 or cursorPos.y > 30000 or cursorPos.z > 30000 then
 					validPos = false
 				end

@@ -970,7 +970,7 @@
 	    "PlayerCanControl"              "1" //bool. Should the player issuing this build command be able to control the building once built?
 	    //"CancelsBuildingGhost"            "0" //bool
 	    // Note: if unit uses a npc_dota_hero baseclass, you must use the npc_dota_hero name.
-	    "UnitName"                      "npc_dota_hero_omniknight"
+	    "UnitName"                      "building_wwt_farm_TEST"
 	    "AbilityCooldown"               "0"
 	    "AbilityGoldCost"               "100"
 	    // End of BuildingHelper info
