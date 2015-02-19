@@ -1,6 +1,7 @@
 require('util')								-- Functions to help debugging
 require('WWT')								-- Where all the globals are stored
 require('functions')						-- Functions used around the mod
+require('popups')
 require('/classes/player')					-- The class of the player
 require('/classes/unit')					-- The class of the unit
 require('/classes/building')				-- The class of the building
