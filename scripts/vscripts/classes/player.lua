@@ -447,6 +447,7 @@ end
 function Player:setLumber(lumber, add)
 	if(add) then
 		self.lumber = self.lumber + lumber
+		PopupLumber(PlayerResource:GetPlayer(self.id):GetAssignedHero(), lumber)
 	else
 		self.lumber = lumber
 	end
