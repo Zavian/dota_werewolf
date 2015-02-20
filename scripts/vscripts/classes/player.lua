@@ -14,7 +14,7 @@ function Player.create(id, lumber)
 	plr._NOW = "human"
 
 	plr._HumanSpells = {"wwt_lumber_collector0", "adrenaline_rush", "poseidon", "toxic_bomb", "spear_shot",
-					"fish_net", "midas", "awesome", "call_dog", "scarecrow"}
+	"fish_net", "midas", "awesome", "call_dog", "scarecrow"}
 	plr.learnedHumanSpells = {"wwt_lumber_collector0", "adrenaline_rush"}
 
 	plr._WerewolfSpells = {"prowl", "tremendous_strength", "sprint", "acute_sense", "cannibalistic_urges"}
@@ -36,41 +36,42 @@ function Player.create(id, lumber)
 	plr.Buildings = {} 		-- The player's buildings
 	plr.Team = nil 			-- The player's team number
 
+	plr.personal_dummy = nil -- This will handle the dummy tee for the player
 	return plr
 end
 --[[
 	This will return an array of the players that have spawned
-]]
-function getSetuppedAndAlivePlayers()
-	local array = {}
-	for i=0, (DOTA_MAX_TEAM_PLAYERS-1) do
-		if(Players[i] ~= nil) then
-			if(Players[i]:isSet()) then
-				if(PlayerResource:GetPlayer(i):GetAssignedHero():IsAlive()) then
-					table.insert(array, i)
+	]]
+	function getSetuppedAndAlivePlayers()
+		local array = {}
+		for i=0, (DOTA_MAX_TEAM_PLAYERS-1) do
+			if(Players[i] ~= nil) then
+				if(Players[i]:isSet()) then
+					if(PlayerResource:GetPlayer(i):GetAssignedHero():IsAlive()) then
+						table.insert(array, i)
+					end
 				end
 			end
 		end
+		return array
 	end
-	return array
-end
 
-function Player:IsNow()
-	return self._NOW
-end
+	function Player:IsNow()
+		return self._NOW
+	end
 
-function Player:setModel(model)
-	self.MODEL = model
-end
+	function Player:setModel(model)
+		self.MODEL = model
+	end
 
-function Player:getModel()
-	return self.MODEL
-end
+	function Player:getModel()
+		return self.MODEL
+	end
 
-function Player:transform(hero, toWerewolf)
-	local oldPosition = hero:GetAbsOrigin()
-	local oldFoward = hero:GetForwardVector()
-	if(toWerewolf) then
+	function Player:transform(hero, toWerewolf)
+		local oldPosition = hero:GetAbsOrigin()
+		local oldFoward = hero:GetForwardVector()
+		if(toWerewolf) then
 		-- Human to Wolf
 		local XP = 0
 		self._NOW = "werewolf"
@@ -125,6 +126,98 @@ function Player:transform(hero, toWerewolf)
 	hero:SetForwardVector(oldFoward)
 end	
 
+function Player:findTrees()
+	--[[
+		This will be optimized, right now it just place an attackable entity over every tree
+		]]
+
+	--local trees = Entities:FindAllByClassname("ent_dota_tree")
+	--local count = 0
+	--local dummy
+	--for i=1, #trees do		
+	--	dummy = CreateUnitByName("npc_wwt_dummy", trees[i]:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
+	--	dummy:AddNewModifier(dummy, nil, "modifier_phased", nil)
+	--	dummy:RemoveModifierByName("modifier_invulnerable")
+	--	trees[i]:Destroy()
+	--	count = count + 1
+	--end
+	--print(count .. " Trees created.")
+
+	--count = nil
+	--trees = nil
+	local player = self
+	if not player.treeFinderStream then
+		local delta = .03
+		local start = false
+		local size = 2
+		player.treeFinderStream = FlashUtil:RequestDataStream( "cursor_position_world", delta, pID, 
+			function(playerID, cursorPos)
+				local validPos = true
+				-- Remember, our blocked squares are defined according to the square's center.
+				if cursorPos.x > 30000 or cursorPos.y > 30000 or cursorPos.z > 30000 then
+					validPos = false
+				end
+
+				if validPos then
+					--if #dummy_trees > 0 then
+					--	ClearDummyTrees( player.dummy_trees )
+					--end
+					local trees = Entities:FindByClassnameWithin(nil, "ent_dota_tree", cursorPos, 50) 
+					--print("----------")
+					if trees ~= nil then
+						--print("I'm over a tree! " .. self.id .. " talking")
+
+						-- Black Magic beyond (Thanks Myll)
+						local centerX = SnapToGrid64(cursorPos.x)
+						local centerY = SnapToGrid64(cursorPos.y)
+						local z = cursorPos.z
+						-- Buildings are centered differently when the size is odd.
+						if size%2 ~= 0 then
+							centerX=SnapToGrid32(cursorPos.x)
+							centerY=SnapToGrid32(cursorPos.y)
+						end
+
+						local vBuildingCenter = Vector(centerX,centerY,z)
+						local halfSide = (size/2)*64
+						local boundingRect = {leftBorderX = centerX-halfSide, 
+						rightBorderX = centerX+halfSide, 
+						topBorderY = centerY+halfSide,
+						bottomBorderY = centerY-halfSide}
+
+						local cursorSnap = nil
+						if player.lastCursorCenter ~= nil then
+							local cursorSnapX = SnapToGrid32(player.lastCursorCenter.x)
+							local cursorSnapY = SnapToGrid32(player.lastCursorCenter.y)
+							cursorSnap = Vector(cursorSnapX, cursorSnapY, vBuildingCenter.z)
+						end
+						if cursorSnap ~= nil and vBuildingCenter ~= cursorSnap then
+							local areaBlocked = false
+							-- Here the magic ends, now begins sorcery
+							-- Simply, I remove any dummy that the player created and I "move" it around the map
+							if player.personal_dummy == nil then
+								player.personal_dummy = CreateUnitByName("npc_wwt_dummy", trees:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
+							else
+								player.personal_dummy:Destroy() 
+								player.personal_dummy = CreateUnitByName("npc_wwt_dummy", trees:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
+							end
+
+						end
+						player.lastCursorCenter = vBuildingCenter
+					else
+						-- If I'm not on a tree I simply destroy any dummy that the player created, so that during a normal game
+						-- we'll have maximum 10 trees + any "permanent tree"
+						if player.personal_dummy ~= nil then
+							player.personal_dummy:Destroy()
+							player.personal_dummy = nil
+						end
+					end	
+
+				end
+			end
+			)
+end
+end
+
 function Player:storeSpells(hero, toWerewolf)
 	if(toWerewolf) then
 		-- Human to Wolf
@@ -137,9 +230,9 @@ function Player:storeSpells(hero, toWerewolf)
 					table.insert(self.learnedHumanSpells, self._HumanSpells[i])
 				end
 			end
-	    end
-	    print("Spells stored for the human")
-	    PrintTable(self.learnedHumanSpells)
+		end
+		print("Spells stored for the human")
+		PrintTable(self.learnedHumanSpells)
 	else
 		-- Wolf to Human
 		self.werewolfAbilityPoints = hero:GetAbilityPoints()
@@ -202,22 +295,22 @@ end
 	This will get the input of all the unit creation spells
 	so that can do the magic
 	[NEED REWORK]
-]]
-function summonDetect(keys)
-	Players[keys.caster:GetPlayerOwnerID()]:createUnit(
-		keys.Summon,
-		keys.caster,
-		keys.target_points[1]
+	]]
+	function summonDetect(keys)
+		Players[keys.caster:GetPlayerOwnerID()]:createUnit(
+			keys.Summon,
+			keys.caster,
+			keys.target_points[1]
 		--keys.Cost,
 		--keys.TimeToBuild,
-	)
-end
+		)
+	end
 
-function Player:createUnit(name, caster, location)
-	local unit = CreateUnitByName(name, location, false, nil, nil, caster:GetTeam())
-	unit:SetControllableByPlayer( self.id, true )
-	unit.vOwner = caster:GetOwner()
-	if(name == "npc_wwt_worker") then
+	function Player:createUnit(name, caster, location)
+		local unit = CreateUnitByName(name, location, false, nil, nil, caster:GetTeam())
+		unit:SetControllableByPlayer( self.id, true )
+		unit.vOwner = caster:GetOwner()
+		if(name == "npc_wwt_worker") then
 		-- Need to select the level of lumber collector
 		unit:FindAbilityByName("wwt_lumber_collector0"):SetLevel(1)
 	end
@@ -249,7 +342,7 @@ end
 --[[
 	This will get the input of all the building creation spells
 	so that can do the magic
-]]
+	]]
 --function buildDetect(keys)
 --	--print(keys.target_points[1])
 --	--CreateUnitByName("building_wwt_farm_TEST", keys.target_points[1], true, keys.caster, keys.caster, keys.caster:GetTeam())
@@ -266,17 +359,17 @@ end
 
 --[[
 	Return: Base's position
-]]
-function Player:getBase()
-	for i=1,table.getn(self.Buildings) do
-		if(self.Buildings[i]:getName() == BASE_NAME) then
-			return self.Buildings[i]:getPosition()
+	]]
+	function Player:getBase()
+		for i=1,table.getn(self.Buildings) do
+			if(self.Buildings[i]:getName() == BASE_NAME) then
+				return self.Buildings[i]:getPosition()
+			end
 		end
+		return -1
 	end
-	return -1
-end
 
-function Player:getUnitById(id)
+	function Player:getUnitById(id)
 	--PrintTable(self.Units)
 	--print("banana")
 	for i=1, table.getn(self.Units) do
@@ -321,7 +414,7 @@ function build(keys)
 	-- 			trigger.Name = self.id .. "bTrigger"
 	-- 			trigger:SetAbsOrigin(point)
 	-- 		end
-			
+
 
 	-- 		farm:UpdateHealth(buildTime, true, scale)
 	-- 		farm:SetControllableByPlayer( caster:GetPlayerID(), true )
@@ -370,14 +463,14 @@ function build(keys)
 		FindClearSpaceForUnit(keys.caster, keys.caster:GetAbsOrigin(), true)
 		-- start the building with 0 mana.
 		unit:SetMana(0)
-	end)
+		end)
 	keys:OnConstructionCompleted(function(unit)
 		print("Completed construction of " .. unit:GetUnitName())
 		-- Play construction complete sound.
 		-- Give building its abilities
 		-- add the mana
 		unit:SetMana(unit:GetMaxMana())
-	end)
+		end)
 
 	-- These callbacks will only fire when the state between below half health/above half health changes.
 	-- i.e. it won't unnecessarily fire multiple times.
@@ -385,17 +478,17 @@ function build(keys)
 		if Debug_BH then
 			print(unit:GetUnitName() .. " is below half health.")
 		end
-	end)
+		end)
 
 	keys:OnAboveHalfHealth(function(unit)
 		if Debug_BH then
 			print(unit:GetUnitName() .. " is above half health.")
 		end
-	end)
+		end)
 
 	--[[keys:OnCanceled(function()
 		print(keys.ability:GetAbilityName() .. " was canceled.")
-	end)]]
+		end)]]
 
 	-- Have a fire effect when the building goes below 50% health.
 	-- It will turn off it building goes above 50% health again.

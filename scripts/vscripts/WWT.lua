@@ -1,7 +1,7 @@
 -- File where all the globals will be declared
 print("WWT found.")
 
-treesSpawned = false
+treesSpawned = true
 MAP_SIZE = 8164*2
 
 theWerewolf = nil
@@ -57,7 +57,7 @@ function WWT:InitGameMode()
 
 	BuildingHelper:Init(MAP_SIZE)					-- Init for the BuildingHelper library
 
-	createTrees()									-- Function that will make the trees targettable
+	--createTrees()									-- Function that will make the trees targettable
 end
 
 -- Evaluate the state of the game
@@ -235,6 +235,8 @@ function WWT:OnEntitySpawn(keys)
 
 				Players[playerID]:setupped()
 				print("Set player number " .. hero:GetPlayerOwnerID() .. " gold to 150")
+
+				Players[playerID]:findTrees()
 			end
 		end
 	end

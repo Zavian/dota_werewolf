@@ -752,7 +752,7 @@
 			"ApplyModifier"
 			{
 				"Target" 			"CASTER"
-				"ModifierName"		"prowl_modifier"	// NEED TO REWORK THE ABILITY
+				"ModifierName"		"prowl_modifier"
 			}			
 		}
 	
