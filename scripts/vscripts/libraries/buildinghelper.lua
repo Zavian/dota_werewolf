@@ -743,7 +743,7 @@ function BuildingHelper:InitializeBuildingEntity(keys)
 	end
 	-- remove gold from playersHero.
 	if playersHero ~= nil then
-		local newGold = playersHero:GetGold() - cost
+		local newGold = playersHero:GetGold() - goldCost
 		playersHero:SetGold(0, false)
 		playersHero:SetGold(newGold, true)
 	end

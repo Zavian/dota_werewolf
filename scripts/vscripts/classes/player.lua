@@ -126,6 +126,21 @@ end
 	hero:SetForwardVector(oldFoward)
 end	
 
+function searchForRightClick(player)
+	print("Started searching")
+	Timers:CreateTimer(function()
+		local entity = PlayerResource:GetPlayer(0):GetAssignedHero():GetCursorTargetingNothing()
+		if entity ~= nil then
+			print(entity)
+			--print(entity:GetUnitName())
+			--print()
+			--player.searching_click = false
+			--return nil
+		end
+		return .03
+    end)
+end
+
 function Player:findTrees()
 	--[[
 		This will be optimized, right now it just place an attackable entity over every tree
@@ -166,7 +181,10 @@ function Player:findTrees()
 					--print("----------")
 					if trees ~= nil then
 						--print("I'm over a tree! " .. self.id .. " talking")
-
+						if not player.searching_click then
+							searchForRightClick(player)
+							player.searching_click = true
+						end
 						-- Black Magic beyond (Thanks Myll)
 						local centerX = SnapToGrid64(cursorPos.x)
 						local centerY = SnapToGrid64(cursorPos.y)
@@ -197,9 +215,13 @@ function Player:findTrees()
 							if player.personal_dummy == nil then
 								player.personal_dummy = CreateUnitByName("npc_wwt_dummy", trees:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
 							else
-								player.personal_dummy:Destroy() 
-								player.personal_dummy = CreateUnitByName("npc_wwt_dummy", trees:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
+								local tmp = Entities:FindAllByClassnameWithin("npc_dota_building", cursorPos, 50)
+								if tmp == nil then
+									player.personal_dummy:RemoveSelf() 
+									player.personal_dummy = CreateUnitByName("npc_wwt_dummy", trees:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_NEUTRALS)
+								end
 							end
+							player.personal_dummy:RemoveModifierByName("modifier_invulnerable")
 
 						end
 						player.lastCursorCenter = vBuildingCenter
@@ -207,7 +229,7 @@ function Player:findTrees()
 						-- If I'm not on a tree I simply destroy any dummy that the player created, so that during a normal game
 						-- we'll have maximum 10 trees + any "permanent tree"
 						if player.personal_dummy ~= nil then
-							player.personal_dummy:Destroy()
+							player.personal_dummy:RemoveSelf()
 							player.personal_dummy = nil
 						end
 					end	
