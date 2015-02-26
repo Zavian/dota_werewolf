@@ -519,7 +519,11 @@ function BuildingHelper:AddBuilding(keys)
 			caster.orders[DoUniqueString("order")] = {["unitName"] = unitName, ["pos"] = vBuildingCenter, ["team"] = caster:GetTeam(),
 				["buildingTable"] = buildingTable, ["squares_to_close"] = closed, ["keys"] = keys}
 			Timers:CreateTimer(.03, function()
-				caster:CastAbilityOnPosition(vBuildingCenter, abil, 0)
+				--caster:CastAbilityOnPosition(vBuildingCenter, abil, 0)
+				local casterIndex = caster:GetEntityIndex()
+				local order = DOTA_UNIT_ORDER_CAST_POSITION
+				local abilIndex = abil:GetEntityIndex()
+				ExecuteOrderFromTable({ UnitIndex = casterIndex, OrderType = DOTA_UNIT_ORDER_CAST_POSITION, AbilityIndex = abilIndex, Position = vBuildingCenter, Queue = false}) 
 
 				-- We need a thinker to check if the abil goes out of phase.
 				-- If it does we need to remove the sticky ghost.
